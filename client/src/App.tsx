@@ -6,11 +6,11 @@ import { ThemeProvider } from "./components/ThemeProvider";
 import { AppHeader } from "./components/AppHeader";
 import { BottomNav, type AppTab } from "./components/BottomNav";
 import TourApp from "./pages/TourApp";
-import EventsPage from "./pages/EventsPage";
 import TheSaltPage from "./pages/TheSaltPage";
 import WeatherPage from "./pages/WeatherPage";
 import FerryPage from "./pages/FerryPage";
-import GoOffPage from "./pages/GoOffPage";
+import ActionTingsPage from "./pages/ActionTingsPage";
+import HolidaysPage from "./pages/HolidaysPage";
 import AdminPage from "./pages/AdminPage";
 
 function MainApp() {
@@ -48,12 +48,12 @@ function MainApp() {
         <AppHeader />
       </div>
       <div className="flex-1 overflow-hidden">
-        {tab === "map"    && <TourApp />}
-        {tab === "gooff"  && <GoOffPage />}
-        {tab === "turnup" && <EventsPage />}
-        {tab === "salt"   && <TheSaltPage />}
-        {tab === "weather" && <WeatherPage />}
-        {tab === "ferry"  && <FerryPage />}
+        {tab === "map"          && <TourApp />}
+        {tab === "actiontings"  && <ActionTingsPage />}
+        {tab === "salt"         && <TheSaltPage />}
+        {tab === "weather"      && <WeatherPage />}
+        {tab === "ferry"        && <FerryPage />}
+        {tab === "holidays"     && <HolidaysPage />}
       </div>
       <BottomNav active={tab} onChange={setTab} />
     </div>
