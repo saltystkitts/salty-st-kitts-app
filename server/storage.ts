@@ -16,6 +16,7 @@ export interface IStorage {
   createStop(stop: InsertStop): Stop;
   updateStop(id: number, stop: Partial<InsertStop>): Stop | undefined;
   deleteStop(id: number): void;
+  deleteAllStops(): void;
 
   // Salt Posts
   getAllSaltPosts(): SaltPost[];
@@ -62,6 +63,10 @@ export class DatabaseStorage implements IStorage {
 
   deleteStop(id: number): void {
     db.delete(stops).where(eq(stops.id, id)).run();
+  }
+
+  deleteAllStops(): void {
+    db.delete(stops).run();
   }
 
   // ── Salt Posts ─────────────────────────────────────────

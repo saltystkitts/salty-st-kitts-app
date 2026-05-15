@@ -119,12 +119,11 @@ const SEED_SALT_POSTS = [
 ];
 
 export async function registerRoutes(httpServer: Server, app: Express): Promise<Server> {
-  // ── Seed on first boot ─────────────────────────────────
-  const existingStops = storage.getAllStops();
-  if (existingStops.length === 0) {
-    for (const stop of SEED_STOPS) {
-      storage.createStop({ ...stop, visible: true } as any);
-    }
+  // ── Seed / reseed on every boot ────────────────────────
+  // Always wipe and reseed stops so code changes are reflected immediately
+  storage.deleteAllStops();
+  for (const stop of SEED_STOPS) {
+    storage.createStop({ ...stop, visible: true } as any);
   }
 
   const existingPosts = storage.getAllSaltPosts();
