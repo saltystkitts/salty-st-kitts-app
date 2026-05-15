@@ -24,6 +24,7 @@ export const stops = sqliteTable("stops", {
   dresscode: text("dresscode"),    // anything | beach | smart
   bestTime: text("best_time"),     // morning | afternoon | evening | latenight
   vibe: text("vibe"),             // chill | lively | local | mixed | tourist
+  closedNote: text("closed_note"),  // if set, shows closed banner with this text (can include URL)
 });
 
 export const insertStopSchema = createInsertSchema(stops).omit({ id: true });

@@ -135,6 +135,17 @@ export function StopSheet({ stop, onClose }: Props) {
             <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5" />{stop.area}</span>
           </div>
 
+          {stop.closedNote && (
+            <div className="rounded-xl px-3 py-2.5 mb-2 flex items-start gap-2" style={{ background: '#E8614A18', border: '1px solid #E8614A44' }}>
+              <span className="text-base shrink-0">🚧</span>
+              <div className="text-xs leading-relaxed" style={{ color: '#E8614A' }}>
+                <span className="font-semibold">Temporarily Closed — </span>
+                {stop.closedNote.includes('http') ? (
+                  <>{stop.closedNote.split('See: ')[0]}{ stop.closedNote.includes('See: ') && <a href={stop.closedNote.split('See: ')[1]} target="_blank" rel="noopener noreferrer" className="underline">Read more</a>}</>
+                ) : stop.closedNote}
+              </div>
+            </div>
+          )}
           <p className="text-sm text-foreground leading-relaxed">{stop.description}</p>
 
           {/* Attribute badges */}
