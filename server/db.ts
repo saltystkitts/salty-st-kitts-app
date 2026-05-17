@@ -51,3 +51,4 @@ try { sqlite.exec(`ALTER TABLE stops ADD COLUMN payment TEXT`); } catch {}
 try { sqlite.exec(`ALTER TABLE stops ADD COLUMN dresscode TEXT`); } catch {}
 try { sqlite.exec(`ALTER TABLE stops ADD COLUMN best_time TEXT`); } catch {}
 try { sqlite.exec(`ALTER TABLE stops ADD COLUMN vibe TEXT`); } catch {}
+try { sqlite.exec(`ALTER TABLE stops ADD COLUMN closed_note TEXT`); } catch {}
