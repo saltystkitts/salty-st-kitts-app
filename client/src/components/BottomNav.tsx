@@ -1,8 +1,8 @@
-import { Map, Zap, Waves, MoreHorizontal, CalendarDays, Compass } from "lucide-react";
+import { Map, Zap, Waves, MoreHorizontal, CalendarDays, Compass, Car } from "lucide-react";
 import { useState } from "react";
 import { Ship, CloudSun } from "lucide-react";
 
-export type AppTab = "map" | "actiontings" | "salt" | "weather" | "ferry" | "holidays" | "explore-area";
+export type AppTab = "map" | "actiontings" | "salt" | "weather" | "ferry" | "holidays" | "explore-area" | "taxi";
 
 const MAIN_TABS: { id: AppTab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { id: "map",          label: "Explore",       icon: Map },
@@ -12,6 +12,7 @@ const MAIN_TABS: { id: AppTab; label: string; icon: React.ComponentType<{ classN
 
 const MORE_TABS: { id: AppTab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { id: "explore-area", label: "By Area",  icon: Compass },
+  { id: "taxi",        label: "Taxis",    icon: Car },
   { id: "holidays",    label: "Holidays", icon: CalendarDays },
   { id: "weather",     label: "Weather",  icon: CloudSun },
   { id: "ferry",       label: "Ferry",    icon: Ship },
