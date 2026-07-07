@@ -11,6 +11,7 @@ import WeatherPage from "./pages/WeatherPage";
 import FerryPage from "./pages/FerryPage";
 import ActionTingsPage from "./pages/ActionTingsPage";
 import HolidaysPage from "./pages/HolidaysPage";
+import ExploreByAreaPage from "./pages/ExploreByAreaPage";
 import AdminPage from "./pages/AdminPage";
 
 function MainApp() {
@@ -54,6 +55,7 @@ function MainApp() {
         {tab === "weather"      && <WeatherPage />}
         {tab === "ferry"        && <FerryPage />}
         {tab === "holidays"     && <HolidaysPage />}
+        {tab === "explore-area" && <ExploreByAreaPage />}
       </div>
       <BottomNav active={tab} onChange={setTab} />
     </div>
