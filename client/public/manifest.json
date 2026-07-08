@@ -1,0 +1,24 @@
+{
+  "name": "Salty St Kitts: The Guide",
+  "short_name": "Salty St Kitts",
+  "description": "St Kitts like a local. Stops, events, insider tips and weather — all in one place.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1C3B5A",
+  "theme_color": "#1C3B5A",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
