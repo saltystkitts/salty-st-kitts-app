@@ -28,7 +28,12 @@ const SUBTEXT: Record<Category, string> = {
   scenic_drive: "Put it in drive and shut up",
 };
 
-export default function TourApp() {
+interface TourAppProps {
+  paywalled?: boolean;
+  onUpgrade?: () => void;
+}
+
+export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) {
   const [category, setCategory] = useState<Category>("all");
   const [selectedStop, setSelectedStop] = useState<Stop | null>(null);
   const [mapCenter, setMapCenter] = useState<[number, number]>([17.3, -62.75]);
@@ -43,12 +48,20 @@ export default function TourApp() {
   });
 
   const handleStopSelect = (stop: Stop) => {
+    if (paywalled && stop.category !== 'scenic_drive') {
+      onUpgrade?.();
+      return;
+    }
     setSelectedStop(stop);
     setMapCenter([stop.lat, stop.lng]);
     setMapZoom(14);
   };
 
   const handleMapPinClick = (stop: Stop) => {
+    if (paywalled && stop.category !== 'scenic_drive') {
+      onUpgrade?.();
+      return;
+    }
     setSelectedStop(stop);
     setMapCenter([stop.lat, stop.lng]);
     setMapZoom(14);

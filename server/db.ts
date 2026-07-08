@@ -41,6 +41,20 @@ sqlite.exec(`
   );
 `);
 
+// App settings table for unlock codes
+sqlite.exec(`
+  CREATE TABLE IF NOT EXISTS app_settings (
+    key TEXT PRIMARY KEY,
+    value TEXT NOT NULL
+  );
+`);
+
+// Seed default unlock codes if not set
+const insertSetting = sqlite.prepare(`INSERT OR IGNORE INTO app_settings (key, value) VALUES (?, ?)`);
+insertSetting.run('unlock_code_paid', 'SALTY869');
+insertSetting.run('unlock_code_friends', 'SALTYFAM');
+insertSetting.run('stripe_link', 'https://buy.stripe.com/8x200c8P86CgdsQg5XgEg0S');
+
 // Safely add columns for schema upgrades
 try { sqlite.exec(`ALTER TABLE stops ADD COLUMN visible INTEGER NOT NULL DEFAULT 1`); } catch {}
 try { sqlite.exec(`ALTER TABLE stops ADD COLUMN parking TEXT`); } catch {}

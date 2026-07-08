@@ -1,6 +1,9 @@
 import type { Express } from "express";
 import type { Server } from "http";
 import { storage } from "./storage";
+import Database from "better-sqlite3";
+import path from "path";
+const sqlite = new Database(path.join(process.cwd(), "stkitts.db"));
 
 const ADMIN_PASSWORD = "salty2026";
 
@@ -215,6 +218,40 @@ export async function registerRoutes(httpServer: Server, app: Express): Promise<
   app.delete("/api/admin/salt-posts/:id", (req, res) => {
     if (!checkAdmin(req)) return res.status(401).json({ message: "Unauthorized" });
     storage.deleteSaltPost(parseInt(req.params.id));
+    return res.json({ ok: true });
+  });
+
+  // ── Public: validate unlock code ───────────────────────
+  app.post("/api/unlock", (req, res) => {
+    const { code } = req.body;
+    if (!code) return res.status(400).json({ valid: false });
+    const cleaned = (code as string).trim().toUpperCase();
+    const paid    = sqlite.prepare(`SELECT value FROM app_settings WHERE key = 'unlock_code_paid'`).get() as { value: string } | undefined;
+    const friends = sqlite.prepare(`SELECT value FROM app_settings WHERE key = 'unlock_code_friends'`).get() as { value: string } | undefined;
+    const stripeRow = sqlite.prepare(`SELECT value FROM app_settings WHERE key = 'stripe_link'`).get() as { value: string } | undefined;
+    const valid = cleaned === paid?.value?.toUpperCase() || cleaned === friends?.value?.toUpperCase();
+    return res.json({ valid, stripeLink: stripeRow?.value ?? '' });
+  });
+
+  // ── Public: get Stripe link ────────────────────────────
+  app.get("/api/stripe-link", (_req, res) => {
+    const row = sqlite.prepare(`SELECT value FROM app_settings WHERE key = 'stripe_link'`).get() as { value: string } | undefined;
+    return res.json({ stripeLink: row?.value ?? '' });
+  });
+
+  // ── Admin: manage unlock codes ─────────────────────────
+  app.get("/api/admin/settings", (req, res) => {
+    if (!checkAdmin(req)) return res.status(401).json({ message: "Unauthorized" });
+    const rows = sqlite.prepare(`SELECT key, value FROM app_settings`).all() as { key: string; value: string }[];
+    const settings: Record<string, string> = {};
+    rows.forEach(r => settings[r.key] = r.value);
+    return res.json(settings);
+  });
+
+  app.put("/api/admin/settings", (req, res) => {
+    if (!checkAdmin(req)) return res.status(401).json({ message: "Unauthorized" });
+    const { key, value } = req.body;
+    sqlite.prepare(`INSERT OR REPLACE INTO app_settings (key, value) VALUES (?, ?)`).run(key, value);
     return res.json({ ok: true });
   });
 

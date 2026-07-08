@@ -463,7 +463,22 @@ function NewPostForm({ onSaved, onCancel }: { onSaved: () => void; onCancel: () 
 // ─── Main Admin Panel ────────────────────────────────────
 export default function AdminPage() {
   const [authed, setAuthed] = useState(false);
-  const [section, setSection] = useState<"stops" | "salt">("stops");
+  const [section, setSection] = useState<"stops" | "salt" | "codes">("stops");
+  const [settings, setSettings] = useState<Record<string,string>>({});
+  const [settingsSaved, setSettingsSaved] = useState(false);
+
+  async function loadSettings() {
+    const res = await fetch("/api/admin/settings", { headers: authHeaders() });
+    setSettings(await res.json());
+  }
+
+  async function saveSetting(key: string, value: string) {
+    await fetch("/api/admin/settings", {
+      method: "PUT",
+      headers: authHeaders(),
+      body: JSON.stringify({ key, value }),
+    });
+  }
   const [stops, setStops] = useState<any[]>([]);
   const [posts, setPosts] = useState<any[]>([]);
   const [addingStop, setAddingStop] = useState(false);
@@ -481,7 +496,7 @@ export default function AdminPage() {
   }
 
   useEffect(() => {
-    if (authed) { loadStops(); loadPosts(); }
+    if (authed) { loadStops(); loadPosts(); loadSettings(); }
   }, [authed]);
 
   if (!authed) return <LoginScreen onLogin={() => setAuthed(true)} />;
@@ -516,6 +531,13 @@ export default function AdminPage() {
           style={{ borderColor: section === "salt" ? "#1AAFCC" : "transparent" }}
         >
           <Waves className="w-4 h-4" /> The Salt ({posts.length})
+        </button>
+        <button
+          onClick={() => setSection("codes")}
+          className={`flex-1 py-3 text-sm font-bold flex items-center justify-center gap-1.5 transition-colors ${section === "codes" ? "border-b-2 text-foreground" : "text-muted-foreground"}`}
+          style={{ borderColor: section === "codes" ? "#1AAFCC" : "transparent" }}
+        >
+          🔑 Codes
         </button>
       </div>
 
@@ -580,6 +602,70 @@ export default function AdminPage() {
             {posts.map(post => (
               <PostRow key={post.id} post={post} onUpdate={loadPosts} onDelete={loadPosts} />
             ))}
+            <div className="h-4" />
+          </div>
+        )}
+
+        {/* ── CODES SECTION ── */}
+        {section === "codes" && (
+          <div className="p-4 space-y-5">
+            <div className="rounded-xl border border-border bg-card p-4 space-y-4">
+              <h2 className="font-bold text-base">Unlock Codes</h2>
+              <p className="text-xs text-muted-foreground">Changes take effect immediately. Tell customers their new code after updating.</p>
+
+              <div className="space-y-3">
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wide text-muted-foreground block mb-1">Paid Customer Code</label>
+                  <input
+                    className="w-full px-3 py-2.5 rounded-xl border border-border bg-background font-bold tracking-widest uppercase text-center text-base"
+                    value={settings.unlock_code_paid ?? ''}
+                    onChange={e => setSettings(s => ({ ...s, unlock_code_paid: e.target.value.toUpperCase() }))}
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wide text-muted-foreground block mb-1">Friends & Rentals Code</label>
+                  <input
+                    className="w-full px-3 py-2.5 rounded-xl border border-border bg-background font-bold tracking-widest uppercase text-center text-base"
+                    value={settings.unlock_code_friends ?? ''}
+                    onChange={e => setSettings(s => ({ ...s, unlock_code_friends: e.target.value.toUpperCase() }))}
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wide text-muted-foreground block mb-1">Stripe Payment Link</label>
+                  <input
+                    className="w-full px-3 py-2.5 rounded-xl border border-border bg-background text-xs"
+                    value={settings.stripe_link ?? ''}
+                    onChange={e => setSettings(s => ({ ...s, stripe_link: e.target.value }))}
+                  />
+                </div>
+
+                <button
+                  onClick={async () => {
+                    await Promise.all([
+                      saveSetting('unlock_code_paid', settings.unlock_code_paid ?? ''),
+                      saveSetting('unlock_code_friends', settings.unlock_code_friends ?? ''),
+                      saveSetting('stripe_link', settings.stripe_link ?? ''),
+                    ]);
+                    setSettingsSaved(true);
+                    setTimeout(() => setSettingsSaved(false), 2500);
+                  }}
+                  className="w-full py-3 rounded-xl text-sm font-bold text-white transition-colors"
+                  style={{ background: settingsSaved ? "#22c55e" : "#1AAFCC" }}
+                >
+                  {settingsSaved ? "✓ Saved" : "Save Changes"}
+                </button>
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-border bg-card p-4">
+              <h3 className="font-bold text-sm mb-2">How it works</h3>
+              <ul className="space-y-1.5 text-xs text-muted-foreground">
+                <li>• Customer pays via Stripe → you email them the <strong>Paid Code</strong></li>
+                <li>• Rental guests & friends get the <strong>Friends Code</strong></li>
+                <li>• Code is entered once and stored on their device — unlocked forever</li>
+                <li>• Change a code anytime to stop new unlocks with the old one</li>
+              </ul>
+            </div>
             <div className="h-4" />
           </div>
         )}
