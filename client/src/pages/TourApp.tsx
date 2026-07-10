@@ -89,32 +89,26 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
         </p>
       </div>
 
-      <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
-        {/* Map */}
-        <div className="relative h-[42vh] md:h-full md:flex-1 flex-shrink-0">
-          <MapView
-            stops={stops}
-            selectedStop={selectedStop}
-            center={mapCenter}
-            zoom={mapZoom}
-            onPinClick={handleMapPinClick}
-          />
-        </div>
+      {/* Main content area */}
+      <div className="flex-1 overflow-hidden flex flex-col md:flex-row">
 
-        {/* Stop list panel */}
-        <div className="flex flex-col flex-1 overflow-hidden md:w-[380px] md:flex-none border-t md:border-t-0 md:border-l border-border bg-background">
+        {/* ── STOP LIST — left on desktop, bottom on mobile ── */}
+        <div className="flex flex-col border-t md:border-t-0 md:border-r border-border bg-background
+                        h-[45vh] md:h-full md:w-[360px] md:flex-none order-2 md:order-1 overflow-hidden">
+
           <div className="px-4 py-2 border-b border-border bg-muted/30 flex items-center justify-between shrink-0">
             <span className="text-sm font-semibold text-foreground">
               {isLoading ? "Asking the locals…" : `${stops.length} stop${stops.length !== 1 ? "s" : ""}`}
             </span>
-            <span className="text-xs text-muted-foreground hidden sm:block">Tap a stop to get the inside scoop</span>
+            <span className="text-xs text-muted-foreground hidden md:block">Tap a stop for the inside scoop</span>
           </div>
 
+          {/* Scrollable list */}
           <div ref={listRef} className="flex-1 overflow-y-auto">
             {isLoading ? (
               <div className="p-3 space-y-2.5">
                 {Array.from({ length: 7 }).map((_, i) => (
-                  <div key={i} className="flex gap-3 p-3.5 rounded-xl bg-card border border-card-border">
+                  <div key={i} className="flex gap-3 p-3.5 rounded-xl bg-card border border-border">
                     <Skeleton className="w-11 h-11 rounded-lg flex-shrink-0" />
                     <div className="flex-1 space-y-2">
                       <Skeleton className="h-4 w-3/4" />
@@ -144,10 +138,24 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
             )}
           </div>
 
+          {/* Desktop stop detail — slides up inside the panel */}
           <DesktopStopDetail stop={selectedStop} onClose={() => setSelectedStop(null)} />
         </div>
+
+        {/* ── MAP — right on desktop, top on mobile ── */}
+        <div className="relative flex-1 order-1 md:order-2 h-[45vh] md:h-full">
+          <MapView
+            stops={stops}
+            selectedStop={selectedStop}
+            center={mapCenter}
+            zoom={mapZoom}
+            onPinClick={handleMapPinClick}
+          />
+        </div>
+
       </div>
 
+      {/* Mobile bottom sheet */}
       <StopSheet stop={selectedStop} onClose={() => setSelectedStop(null)} />
     </div>
   );
