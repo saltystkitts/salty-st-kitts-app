@@ -91,14 +91,18 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
       </div>
 
       {/* Special full-page tabs — no map */}
-      {category === "the_salt" && (
-        <div className="flex-1 min-h-0 overflow-hidden">
-          <TheSaltPage />
-        </div>
-      )}
-      {category === "action_tings" && (
-        <div className="flex-1 min-h-0 overflow-hidden">
-          <ActionTingsPage />
+      {(category === "the_salt" || category === "action_tings") && (
+        <div className="flex-1 min-h-0 overflow-hidden flex flex-col items-center justify-center gap-4 px-8 text-center">
+          <div className="text-5xl">{category === "the_salt" ? "🧂" : "⚡"}</div>
+          <h2 className="text-xl font-extrabold text-foreground">
+            {category === "the_salt" ? "The Salt" : "Action Tings"}
+          </h2>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            {category === "the_salt"
+              ? "Local tips, insider knowledge, and the stuff you won't find in any guidebook. Coming soon."
+              : "Everything worth doing on this island. Coming soon."}
+          </p>
+          <span className="px-4 py-1.5 rounded-full text-xs font-bold" style={{ background: "#1AAFCC22", color: "#1AAFCC" }}>Coming Soon</span>
         </div>
       )}
 
