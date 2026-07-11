@@ -18,7 +18,7 @@ import TaxiPage from "./pages/TaxiPage";
 import AdminPage from "./pages/AdminPage";
 
 // Pages that are free for everyone
-const FREE_TABS: AppTab[] = ["map", "salt"];
+const FREE_TABS: AppTab[] = ["map", "salt", "actiontings"];
 
 function MainApp() {
   const { unlocked } = useUnlock();
@@ -89,11 +89,11 @@ function MainApp() {
 
       <div className="flex-1 min-h-0 overflow-hidden">
         {/* Free tabs — always available */}
-        {tab === "map"  && <TourApp paywalled={!unlocked} onUpgrade={() => setShowPaywall(true)} />}
-        {tab === "salt" && <TheSaltPage />}
+        {tab === "map"        && <TourApp paywalled={!unlocked} onUpgrade={() => setShowPaywall(true)} />}
+        {tab === "salt"       && <TheSaltPage />}
+        {tab === "actiontings" && <ActionTingsPage />}
 
         {/* Paid tabs — only render if unlocked */}
-        {unlocked && tab === "actiontings"  && <ActionTingsPage />}
         {unlocked && tab === "weather"      && <WeatherPage />}
         {unlocked && tab === "ferry"        && <FerryPage />}
         {unlocked && tab === "holidays"     && <HolidaysPage />}

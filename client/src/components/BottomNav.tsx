@@ -4,7 +4,7 @@ import { Ship, CloudSun } from "lucide-react";
 
 export type AppTab = "map" | "actiontings" | "salt" | "weather" | "ferry" | "holidays" | "explore-area" | "taxi";
 
-const FREE_TABS: AppTab[] = ["map", "salt"];
+const FREE_TABS: AppTab[] = ["map", "salt", "actiontings"];
 
 const MAIN_TABS: { id: AppTab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { id: "map",         label: "Explore",      icon: Map },
