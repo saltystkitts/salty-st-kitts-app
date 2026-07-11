@@ -103,13 +103,15 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
             <span className="text-sm font-semibold text-foreground">
               {isLoading ? "Asking the locals…" : `${stops.length} stop${stops.length !== 1 ? "s" : ""}`}
             </span>
-            <button
-              onClick={() => setMapVisible(v => !v)}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold border transition-colors"
-              style={{ borderColor: "#1AAFCC44", color: "#1AAFCC" }}
-            >
-              {mapVisible ? <><X className="w-3 h-3" /> Hide Map</> : <><Map className="w-3 h-3" /> Show Map</>}
-            </button>
+            {!mapVisible && (
+              <button
+                onClick={() => setMapVisible(true)}
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold border transition-colors"
+                style={{ borderColor: "#1AAFCC44", color: "#1AAFCC" }}
+              >
+                <Map className="w-3 h-3" /> Show Map
+              </button>
+            )}
           </div>
 
           {/* Scrollable list */}
@@ -153,14 +155,25 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
 
         {/* ── MAP — right on desktop, top on mobile ── */}
         {mapVisible && (
-          <div className="relative order-1 md:order-2 h-[45vh] md:flex-1 md:h-full min-h-0 overflow-hidden">
-            <MapView
-              stops={stops}
-              selectedStop={selectedStop}
-              center={mapCenter}
-              zoom={mapZoom}
-              onPinClick={handleMapPinClick}
-            />
+          <div className="order-1 md:order-2 h-[45vh] md:flex-1 relative" style={{ minHeight: 0 }}>
+            {/* X button overlaid on map */}
+            <button
+              onClick={() => setMapVisible(false)}
+              className="absolute top-2 right-2 z-[1000] flex items-center justify-center w-8 h-8 rounded-full shadow-lg transition-opacity hover:opacity-90"
+              style={{ background: "#1C3B5A", color: "white" }}
+            >
+              <X className="w-4 h-4" />
+            </button>
+            {/* Map fills wrapper via absolute inset */}
+            <div className="absolute inset-0">
+              <MapView
+                stops={stops}
+                selectedStop={selectedStop}
+                center={mapCenter}
+                zoom={mapZoom}
+                onPinClick={handleMapPinClick}
+              />
+            </div>
           </div>
         )}
 
