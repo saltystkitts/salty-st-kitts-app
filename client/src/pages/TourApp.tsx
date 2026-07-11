@@ -8,8 +8,10 @@ import { CategoryFilter } from "../components/CategoryFilter";
 import { StopSheet, DesktopStopDetail } from "../components/StopSheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Map, X } from "lucide-react";
+import ActionTingsPage from "./ActionTingsPage";
+import TheSaltPage from "./TheSaltPage";
 
-export type Category = "all" | "historical" | "nature" | "food_nightlife" | "beach" | "scenic_drive";
+export type Category = "all" | "historical" | "nature" | "food_nightlife" | "beach" | "scenic_drive" | "loot" | "the_salt" | "action_tings";
 
 const EMPTY_MESSAGES: Record<Category, string> = {
   all: "Somehow we have no stops. That's impressive.",
@@ -18,6 +20,9 @@ const EMPTY_MESSAGES: Record<Category, string> = {
   food_nightlife: "No food or rum?! That's a crisis. Refresh the page.",
   beach: "No beaches found. Are you sure you're on St Kitts?",
   scenic_drive: "No drives? Just pick a direction and go.",
+  loot: "Nothing to buy? That's actually on brand.",
+  the_salt: "",
+  action_tings: "",
 };
 
 const SUBTEXT: Record<Category, string> = {
@@ -27,6 +32,9 @@ const SUBTEXT: Record<Category, string> = {
   food_nightlife: "Rum, fish & bad decisions",
   beach: "Sand between your toes, Nevis in your face",
   scenic_drive: "Put it in drive and shut up",
+  loot: "Shop smart, not tourist",
+  the_salt: "Straight from the source",
+  action_tings: "Get off the beach and do something",
 };
 
 interface TourAppProps {
@@ -82,7 +90,20 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
         <p className="text-xs text-muted-foreground font-medium italic">{SUBTEXT[category]}</p>
       </div>
 
-      {/* Main area */}
+      {/* Special full-page tabs — no map */}
+      {category === "the_salt" && (
+        <div className="flex-1 min-h-0 overflow-hidden">
+          <TheSaltPage />
+        </div>
+      )}
+      {category === "action_tings" && (
+        <div className="flex-1 min-h-0 overflow-hidden">
+          <ActionTingsPage />
+        </div>
+      )}
+
+      {/* Main area — map + stop list */}
+      {category !== "the_salt" && category !== "action_tings" && (
       <div className="flex-1 min-h-0 relative flex flex-col">
 
         {/* ── MAP — full width, closable ── */}
@@ -165,6 +186,8 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
 
       {/* Mobile bottom sheet */}
       <StopSheet stop={selectedStop} onClose={() => setSelectedStop(null)} />
+      </div>
+      )}
     </div>
   );
 }

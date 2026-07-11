@@ -1,14 +1,16 @@
 import type { Category } from "../pages/TourApp";
-import { Landmark, TreePine, UtensilsCrossed, Waves, Car, LayoutGrid, ShoppingBag } from "lucide-react";
+import { Landmark, TreePine, UtensilsCrossed, Waves, Car, LayoutGrid, ShoppingBag, Zap, Newspaper } from "lucide-react";
 
 const CATEGORIES: { value: Category; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
-  { value: "all", label: "All", icon: LayoutGrid },
-  { value: "historical", label: "History", icon: Landmark },
-  { value: "nature", label: "The Bush", icon: TreePine },
-  { value: "food_nightlife", label: "Lime & Dine", icon: UtensilsCrossed },
-  { value: "beach", label: "Beaches", icon: Waves },
-  { value: "scenic_drive", label: "Drives", icon: Car },
-  { value: "loot", label: "Loot", icon: ShoppingBag },
+  { value: "all",          label: "All",          icon: LayoutGrid },
+  { value: "historical",   label: "History",      icon: Landmark },
+  { value: "nature",       label: "The Bush",     icon: TreePine },
+  { value: "food_nightlife",label: "Lime & Dine", icon: UtensilsCrossed },
+  { value: "beach",        label: "Beaches",      icon: Waves },
+  { value: "scenic_drive", label: "Drives",       icon: Car },
+  { value: "loot",         label: "Loot",         icon: ShoppingBag },
+  { value: "the_salt",     label: "The Salt",     icon: Newspaper },
+  { value: "action_tings", label: "Action Tings", icon: Zap },
 ];
 
 interface Props {
