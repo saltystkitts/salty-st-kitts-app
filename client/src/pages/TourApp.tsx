@@ -50,26 +50,19 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
   });
 
   const handleStopSelect = (stop: Stop) => {
-    if (paywalled && stop.category !== 'scenic_drive') {
-      onUpgrade?.();
-      return;
-    }
+    if (paywalled && stop.category !== "scenic_drive") { onUpgrade?.(); return; }
     setSelectedStop(stop);
     setMapCenter([stop.lat, stop.lng]);
     setMapZoom(14);
   };
 
   const handleMapPinClick = (stop: Stop) => {
-    if (paywalled && stop.category !== 'scenic_drive') {
-      onUpgrade?.();
-      return;
-    }
+    if (paywalled && stop.category !== "scenic_drive") { onUpgrade?.(); return; }
     setSelectedStop(stop);
     setMapCenter([stop.lat, stop.lng]);
     setMapZoom(14);
     if (listRef.current) {
-      const el = listRef.current.querySelector(`[data-stop-id="${stop.id}"]`);
-      el?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      listRef.current.querySelector(`[data-stop-id="${stop.id}"]`)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
   };
 
@@ -84,29 +77,47 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
     <div className="flex flex-col h-full bg-background overflow-hidden">
       <CategoryFilter category={category} onChange={handleCategoryChange} />
 
-      {/* Salty subtext bar */}
+      {/* Subtext */}
       <div className="px-4 py-1.5 bg-muted/40 border-b border-border shrink-0">
-        <p className="text-xs text-muted-foreground font-medium italic">
-          {SUBTEXT[category]}
-        </p>
+        <p className="text-xs text-muted-foreground font-medium italic">{SUBTEXT[category]}</p>
       </div>
 
-      {/* Main content area */}
-      <div className="flex-1 min-h-0 flex flex-col md:flex-row">
+      {/* Main area */}
+      <div className="flex-1 min-h-0 relative flex flex-col">
 
-        {/* ── STOP LIST — left on desktop, bottom on mobile ── */}
-        <div className={`flex flex-col border-t md:border-t-0 md:border-r border-border bg-background min-h-0
-                        ${ mapVisible ? "h-[42vh] md:h-full md:w-[360px] md:flex-none" : "h-full w-full" }
-                        order-2 md:order-1`}>
+        {/* ── MAP — full width, closable ── */}
+        {mapVisible && (
+          <div className="relative w-full" style={{ height: "55%" }}>
+            {/* X to close */}
+            <button
+              onClick={() => setMapVisible(false)}
+              className="absolute top-2 right-2 z-[1000] flex items-center justify-center w-8 h-8 rounded-full shadow-lg"
+              style={{ background: "#1C3B5A", color: "white" }}
+            >
+              <X className="w-4 h-4" />
+            </button>
+            <div className="absolute inset-0">
+              <MapView
+                stops={stops}
+                selectedStop={selectedStop}
+                center={mapCenter}
+                zoom={mapZoom}
+                onPinClick={handleMapPinClick}
+              />
+            </div>
+          </div>
+        )}
 
+        {/* ── STOP LIST ── */}
+        <div className="flex flex-col min-h-0 overflow-hidden" style={{ flex: 1 }}>
           <div className="px-4 py-2 border-b border-border bg-muted/30 flex items-center justify-between shrink-0">
-            <span className="text-sm font-semibold text-foreground">
+            <span className="text-sm font-semibold">
               {isLoading ? "Asking the locals…" : `${stops.length} stop${stops.length !== 1 ? "s" : ""}`}
             </span>
             {!mapVisible && (
               <button
                 onClick={() => setMapVisible(true)}
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold border transition-colors"
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold border"
                 style={{ borderColor: "#1AAFCC44", color: "#1AAFCC" }}
               >
                 <Map className="w-3 h-3" /> Show Map
@@ -114,7 +125,6 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
             )}
           </div>
 
-          {/* Scrollable list */}
           <div ref={listRef} className="flex-1 overflow-y-auto">
             {isLoading ? (
               <div className="p-3 space-y-2.5">
@@ -132,7 +142,7 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
             ) : stops.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
                 <div className="text-4xl mb-3">🤷</div>
-                <h3 className="font-semibold text-foreground mb-1">{EMPTY_MESSAGES[category]}</h3>
+                <h3 className="font-semibold">{EMPTY_MESSAGES[category]}</h3>
               </div>
             ) : (
               <div className="p-3 space-y-2.5">
@@ -149,34 +159,8 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
             )}
           </div>
 
-          {/* Desktop stop detail — slides up inside the panel */}
           <DesktopStopDetail stop={selectedStop} onClose={() => setSelectedStop(null)} />
         </div>
-
-        {/* ── MAP — right on desktop, top on mobile ── */}
-        {mapVisible && (
-          <div className="order-1 md:order-2 h-[45vh] md:flex-1 relative" style={{ minHeight: 0 }}>
-            {/* X button overlaid on map */}
-            <button
-              onClick={() => setMapVisible(false)}
-              className="absolute top-2 right-2 z-[1000] flex items-center justify-center w-8 h-8 rounded-full shadow-lg transition-opacity hover:opacity-90"
-              style={{ background: "#1C3B5A", color: "white" }}
-            >
-              <X className="w-4 h-4" />
-            </button>
-            {/* Map fills wrapper via absolute inset */}
-            <div className="absolute inset-0">
-              <MapView
-                stops={stops}
-                selectedStop={selectedStop}
-                center={mapCenter}
-                zoom={mapZoom}
-                onPinClick={handleMapPinClick}
-              />
-            </div>
-          </div>
-        )}
-
       </div>
 
       {/* Mobile bottom sheet */}
