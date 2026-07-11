@@ -7,6 +7,7 @@ import { StopCard } from "../components/StopCard";
 import { CategoryFilter } from "../components/CategoryFilter";
 import { StopSheet, DesktopStopDetail } from "../components/StopSheet";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Map, X } from "lucide-react";
 
 export type Category = "all" | "historical" | "nature" | "food_nightlife" | "beach" | "scenic_drive";
 
@@ -38,6 +39,7 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
   const [selectedStop, setSelectedStop] = useState<Stop | null>(null);
   const [mapCenter, setMapCenter] = useState<[number, number]>([17.3, -62.75]);
   const [mapZoom, setMapZoom] = useState(11);
+  const [mapVisible, setMapVisible] = useState(true);
   const listRef = useRef<HTMLDivElement>(null);
 
   const { data: stops = [], isLoading } = useQuery<Stop[]>({
@@ -93,14 +95,21 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
       <div className="flex-1 min-h-0 flex flex-col md:flex-row">
 
         {/* ── STOP LIST — left on desktop, bottom on mobile ── */}
-        <div className="flex flex-col border-t md:border-t-0 md:border-r border-border bg-background
-                        h-[42vh] md:h-auto md:w-[360px] md:flex-none order-2 md:order-1 min-h-0">
+        <div className={`flex flex-col border-t md:border-t-0 md:border-r border-border bg-background min-h-0
+                        ${ mapVisible ? "h-[42vh] md:h-full md:w-[360px] md:flex-none" : "h-full w-full" }
+                        order-2 md:order-1`}>
 
           <div className="px-4 py-2 border-b border-border bg-muted/30 flex items-center justify-between shrink-0">
             <span className="text-sm font-semibold text-foreground">
               {isLoading ? "Asking the locals…" : `${stops.length} stop${stops.length !== 1 ? "s" : ""}`}
             </span>
-            <span className="text-xs text-muted-foreground hidden md:block">Tap a stop for the inside scoop</span>
+            <button
+              onClick={() => setMapVisible(v => !v)}
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold border transition-colors"
+              style={{ borderColor: "#1AAFCC44", color: "#1AAFCC" }}
+            >
+              {mapVisible ? <><X className="w-3 h-3" /> Hide Map</> : <><Map className="w-3 h-3" /> Show Map</>}
+            </button>
           </div>
 
           {/* Scrollable list */}
@@ -143,15 +152,17 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
         </div>
 
         {/* ── MAP — right on desktop, top on mobile ── */}
-        <div className="relative order-1 md:order-2 h-[45vh] md:flex-1 md:h-auto min-h-0">
-          <MapView
-            stops={stops}
-            selectedStop={selectedStop}
-            center={mapCenter}
-            zoom={mapZoom}
-            onPinClick={handleMapPinClick}
-          />
-        </div>
+        {mapVisible && (
+          <div className="relative order-1 md:order-2 h-[45vh] md:flex-1 md:h-full min-h-0 overflow-hidden">
+            <MapView
+              stops={stops}
+              selectedStop={selectedStop}
+              center={mapCenter}
+              zoom={mapZoom}
+              onPinClick={handleMapPinClick}
+            />
+          </div>
+        )}
 
       </div>
 
