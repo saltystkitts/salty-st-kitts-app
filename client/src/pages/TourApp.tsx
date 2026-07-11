@@ -183,11 +183,11 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
           <DesktopStopDetail stop={selectedStop} onClose={() => setSelectedStop(null)} />
         </div>
       </div>
+      )}
 
       {/* Mobile bottom sheet */}
       <StopSheet stop={selectedStop} onClose={() => setSelectedStop(null)} />
-      </div>
-      )}
+
     </div>
   );
 }
