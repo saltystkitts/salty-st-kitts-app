@@ -90,11 +90,11 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
       </div>
 
       {/* Main content area */}
-      <div className="flex-1 overflow-hidden flex flex-col md:flex-row">
+      <div className="flex-1 min-h-0 flex flex-col md:flex-row">
 
         {/* ── STOP LIST — left on desktop, bottom on mobile ── */}
         <div className="flex flex-col border-t md:border-t-0 md:border-r border-border bg-background
-                        h-[45vh] md:h-full md:w-[360px] md:flex-none order-2 md:order-1 overflow-hidden">
+                        h-[42vh] md:h-auto md:w-[360px] md:flex-none order-2 md:order-1 min-h-0">
 
           <div className="px-4 py-2 border-b border-border bg-muted/30 flex items-center justify-between shrink-0">
             <span className="text-sm font-semibold text-foreground">
@@ -143,7 +143,7 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
         </div>
 
         {/* ── MAP — right on desktop, top on mobile ── */}
-        <div className="relative flex-1 order-1 md:order-2 h-[45vh] md:h-full">
+        <div className="relative order-1 md:order-2 h-[45vh] md:flex-1 md:h-auto min-h-0">
           <MapView
             stops={stops}
             selectedStop={selectedStop}

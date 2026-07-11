@@ -66,7 +66,7 @@ function MainApp() {
           <span className="text-xs text-muted-foreground">Admin Mode</span>
           <button onClick={() => setAdminMode(false)} className="text-xs font-bold" style={{ color: "#1AAFCC" }}>← Back to App</button>
         </div>
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 min-h-0 overflow-hidden">
           <AdminPage />
         </div>
       </div>
@@ -87,7 +87,7 @@ function MainApp() {
         <AppHeader />
       </div>
 
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 min-h-0 overflow-hidden">
         {/* Free tabs — always available */}
         {tab === "map"  && <TourApp paywalled={!unlocked} onUpgrade={() => setShowPaywall(true)} />}
         {tab === "salt" && <TheSaltPage />}
