@@ -156,11 +156,13 @@ const SEED_SALT_POSTS = [
 ];
 
 export async function registerRoutes(httpServer: Server, app: Express): Promise<Server> {
-  // ── Seed / reseed on every boot ────────────────────────
-  // Always wipe and reseed stops so code changes are reflected immediately
-  storage.deleteAllStops();
-  for (const stop of SEED_STOPS) {
-    storage.createStop({ ...stop, visible: true } as any);
+  // ── Seed only if DB is empty ────────────────────────
+  // Force reseed is OFF — manual admin edits are preserved
+  const existingStops = storage.getAllStops();
+  if (existingStops.length === 0) {
+    for (const stop of SEED_STOPS) {
+      storage.createStop({ ...stop, visible: true } as any);
+    }
   }
 
   const existingPosts = storage.getAllSaltPosts();
