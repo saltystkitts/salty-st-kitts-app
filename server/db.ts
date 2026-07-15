@@ -1,68 +1,72 @@
-import Database from "better-sqlite3";
-import { drizzle } from "drizzle-orm/better-sqlite3";
+import { Pool } from "pg";
+import { drizzle } from "drizzle-orm/node-postgres";
 import * as schema from "@shared/schema";
-import path from "path";
 
-const sqlite = new Database(path.join(process.cwd(), "stkitts.db"));
-export const db = drizzle(sqlite, { schema });
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.DATABASE_URL?.includes("railway.internal")
+    ? false
+    : { rejectUnauthorized: false },
+});
+
+export const db = drizzle(pool, { schema });
 
 // Create tables if they don't exist
-sqlite.exec(`
-  CREATE TABLE IF NOT EXISTS stops (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    category TEXT NOT NULL,
-    description TEXT NOT NULL,
-    tip TEXT NOT NULL,
-    duration TEXT NOT NULL,
-    lat REAL NOT NULL,
-    lng REAL NOT NULL,
-    area TEXT NOT NULL,
-    featured INTEGER NOT NULL DEFAULT 0,
-    visible INTEGER NOT NULL DEFAULT 1,
-    image_url TEXT
-  );
+export async function initDb() {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS stops (
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      category TEXT NOT NULL,
+      description TEXT NOT NULL,
+      tip TEXT NOT NULL,
+      duration TEXT NOT NULL,
+      lat REAL NOT NULL,
+      lng REAL NOT NULL,
+      area TEXT NOT NULL,
+      featured BOOLEAN NOT NULL DEFAULT false,
+      visible BOOLEAN NOT NULL DEFAULT true,
+      image_url TEXT,
+      parking TEXT,
+      smoking TEXT,
+      kids_ok TEXT,
+      wifi TEXT,
+      payment TEXT,
+      dresscode TEXT,
+      best_time TEXT,
+      vibe TEXT,
+      closed_note TEXT
+    );
 
-  CREATE TABLE IF NOT EXISTS salt_posts (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT NOT NULL,
-    date TEXT NOT NULL,
-    preview TEXT NOT NULL,
-    body TEXT NOT NULL,
-    emoji TEXT NOT NULL DEFAULT '🌊',
-    tag TEXT NOT NULL DEFAULT 'Local Tips',
-    visible INTEGER NOT NULL DEFAULT 1
-  );
+    CREATE TABLE IF NOT EXISTS salt_posts (
+      id SERIAL PRIMARY KEY,
+      title TEXT NOT NULL,
+      date TEXT NOT NULL,
+      preview TEXT NOT NULL,
+      body TEXT NOT NULL,
+      emoji TEXT NOT NULL DEFAULT '🌊',
+      tag TEXT NOT NULL DEFAULT 'Local Tips',
+      visible BOOLEAN NOT NULL DEFAULT true
+    );
 
-  CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL
-  );
-`);
+    CREATE TABLE IF NOT EXISTS users (
+      id SERIAL PRIMARY KEY,
+      username TEXT NOT NULL UNIQUE,
+      password TEXT NOT NULL
+    );
 
-// App settings table for unlock codes
-sqlite.exec(`
-  CREATE TABLE IF NOT EXISTS app_settings (
-    key TEXT PRIMARY KEY,
-    value TEXT NOT NULL
-  );
-`);
+    CREATE TABLE IF NOT EXISTS app_settings (
+      key TEXT PRIMARY KEY,
+      value TEXT NOT NULL
+    );
+  `);
 
-// Seed default unlock codes if not set
-const insertSetting = sqlite.prepare(`INSERT OR IGNORE INTO app_settings (key, value) VALUES (?, ?)`);
-insertSetting.run('unlock_code_paid', 'SALTY869');
-insertSetting.run('unlock_code_friends', 'SALTYFAM');
-insertSetting.run('stripe_link', 'https://buy.stripe.com/8x200c8P86CgdsQg5XgEg0S');
-
-// Safely add columns for schema upgrades
-try { sqlite.exec(`ALTER TABLE stops ADD COLUMN visible INTEGER NOT NULL DEFAULT 1`); } catch {}
-try { sqlite.exec(`ALTER TABLE stops ADD COLUMN parking TEXT`); } catch {}
-try { sqlite.exec(`ALTER TABLE stops ADD COLUMN smoking TEXT`); } catch {}
-try { sqlite.exec(`ALTER TABLE stops ADD COLUMN kids_ok TEXT`); } catch {}
-try { sqlite.exec(`ALTER TABLE stops ADD COLUMN wifi TEXT`); } catch {}
-try { sqlite.exec(`ALTER TABLE stops ADD COLUMN payment TEXT`); } catch {}
-try { sqlite.exec(`ALTER TABLE stops ADD COLUMN dresscode TEXT`); } catch {}
-try { sqlite.exec(`ALTER TABLE stops ADD COLUMN best_time TEXT`); } catch {}
-try { sqlite.exec(`ALTER TABLE stops ADD COLUMN vibe TEXT`); } catch {}
-try { sqlite.exec(`ALTER TABLE stops ADD COLUMN closed_note TEXT`); } catch {}
+  // Seed default unlock codes if not set
+  await pool.query(`
+    INSERT INTO app_settings (key, value) VALUES
+      ('unlock_code_paid', 'SALTY869'),
+      ('unlock_code_friends', 'SALTYFAM'),
+      ('stripe_link', 'https://buy.stripe.com/8x200c8P86CgdsQg5XgEg0S')
+    ON CONFLICT (key) DO NOTHING;
+  `);
+}

@@ -9,102 +9,109 @@ import { eq } from "drizzle-orm";
 
 export interface IStorage {
   // Stops
-  getAllStops(): Stop[];
-  getVisibleStops(): Stop[];
-  getStopsByCategory(category: string): Stop[];
-  getStop(id: number): Stop | undefined;
-  createStop(stop: InsertStop): Stop;
-  updateStop(id: number, stop: Partial<InsertStop>): Stop | undefined;
-  deleteStop(id: number): void;
-  deleteAllStops(): void;
+  getAllStops(): Promise<Stop[]>;
+  getVisibleStops(): Promise<Stop[]>;
+  getStopsByCategory(category: string): Promise<Stop[]>;
+  getStop(id: number): Promise<Stop | undefined>;
+  createStop(stop: InsertStop): Promise<Stop>;
+  updateStop(id: number, stop: Partial<InsertStop>): Promise<Stop | undefined>;
+  deleteStop(id: number): Promise<void>;
+  deleteAllStops(): Promise<void>;
 
   // Salt Posts
-  getAllSaltPosts(): SaltPost[];
-  getVisibleSaltPosts(): SaltPost[];
-  getSaltPost(id: number): SaltPost | undefined;
-  createSaltPost(post: InsertSaltPost): SaltPost;
-  updateSaltPost(id: number, post: Partial<InsertSaltPost>): SaltPost | undefined;
-  deleteSaltPost(id: number): void;
+  getAllSaltPosts(): Promise<SaltPost[]>;
+  getVisibleSaltPosts(): Promise<SaltPost[]>;
+  getSaltPost(id: number): Promise<SaltPost | undefined>;
+  createSaltPost(post: InsertSaltPost): Promise<SaltPost>;
+  updateSaltPost(id: number, post: Partial<InsertSaltPost>): Promise<SaltPost | undefined>;
+  deleteSaltPost(id: number): Promise<void>;
 
   // Users
-  getUser(id: number): User | undefined;
-  getUserByUsername(username: string): User | undefined;
-  createUser(user: InsertUser): User;
+  getUser(id: number): Promise<User | undefined>;
+  getUserByUsername(username: string): Promise<User | undefined>;
+  createUser(user: InsertUser): Promise<User>;
 }
 
 export class DatabaseStorage implements IStorage {
   // ── Stops ──────────────────────────────────────────────
-  getAllStops(): Stop[] {
-    return db.select().from(stops).all();
+  async getAllStops(): Promise<Stop[]> {
+    return db.select().from(stops);
   }
 
-  getVisibleStops(): Stop[] {
-    return db.select().from(stops).where(eq(stops.visible, true)).all();
+  async getVisibleStops(): Promise<Stop[]> {
+    return db.select().from(stops).where(eq(stops.visible, true));
   }
 
-  getStopsByCategory(category: string): Stop[] {
-    return db.select().from(stops)
-      .where(eq(stops.category, category))
-      .all()
-      .filter(s => s.visible);
+  async getStopsByCategory(category: string): Promise<Stop[]> {
+    const result = await db.select().from(stops).where(eq(stops.category, category));
+    return result.filter(s => s.visible);
   }
 
-  getStop(id: number): Stop | undefined {
-    return db.select().from(stops).where(eq(stops.id, id)).get();
+  async getStop(id: number): Promise<Stop | undefined> {
+    const result = await db.select().from(stops).where(eq(stops.id, id));
+    return result[0];
   }
 
-  createStop(stop: InsertStop): Stop {
-    return db.insert(stops).values(stop).returning().get();
+  async createStop(stop: InsertStop): Promise<Stop> {
+    const result = await db.insert(stops).values(stop).returning();
+    return result[0];
   }
 
-  updateStop(id: number, data: Partial<InsertStop>): Stop | undefined {
-    return db.update(stops).set(data).where(eq(stops.id, id)).returning().get();
+  async updateStop(id: number, data: Partial<InsertStop>): Promise<Stop | undefined> {
+    const result = await db.update(stops).set(data).where(eq(stops.id, id)).returning();
+    return result[0];
   }
 
-  deleteStop(id: number): void {
-    db.delete(stops).where(eq(stops.id, id)).run();
+  async deleteStop(id: number): Promise<void> {
+    await db.delete(stops).where(eq(stops.id, id));
   }
 
-  deleteAllStops(): void {
-    db.delete(stops).run();
+  async deleteAllStops(): Promise<void> {
+    await db.delete(stops);
   }
 
   // ── Salt Posts ─────────────────────────────────────────
-  getAllSaltPosts(): SaltPost[] {
-    return db.select().from(saltPosts).all();
+  async getAllSaltPosts(): Promise<SaltPost[]> {
+    return db.select().from(saltPosts);
   }
 
-  getVisibleSaltPosts(): SaltPost[] {
-    return db.select().from(saltPosts).where(eq(saltPosts.visible, true)).all();
+  async getVisibleSaltPosts(): Promise<SaltPost[]> {
+    return db.select().from(saltPosts).where(eq(saltPosts.visible, true));
   }
 
-  getSaltPost(id: number): SaltPost | undefined {
-    return db.select().from(saltPosts).where(eq(saltPosts.id, id)).get();
+  async getSaltPost(id: number): Promise<SaltPost | undefined> {
+    const result = await db.select().from(saltPosts).where(eq(saltPosts.id, id));
+    return result[0];
   }
 
-  createSaltPost(post: InsertSaltPost): SaltPost {
-    return db.insert(saltPosts).values(post).returning().get();
+  async createSaltPost(post: InsertSaltPost): Promise<SaltPost> {
+    const result = await db.insert(saltPosts).values(post).returning();
+    return result[0];
   }
 
-  updateSaltPost(id: number, data: Partial<InsertSaltPost>): SaltPost | undefined {
-    return db.update(saltPosts).set(data).where(eq(saltPosts.id, id)).returning().get();
+  async updateSaltPost(id: number, data: Partial<InsertSaltPost>): Promise<SaltPost | undefined> {
+    const result = await db.update(saltPosts).set(data).where(eq(saltPosts.id, id)).returning();
+    return result[0];
   }
 
-  deleteSaltPost(id: number): void {
-    db.delete(saltPosts).where(eq(saltPosts.id, id)).run();
+  async deleteSaltPost(id: number): Promise<void> {
+    await db.delete(saltPosts).where(eq(saltPosts.id, id));
   }
 
   // ── Users ──────────────────────────────────────────────
-  getUser(id: number): User | undefined {
-    return db.select().from(users).where(eq(users.id, id)).get();
+  async getUser(id: number): Promise<User | undefined> {
+    const result = await db.select().from(users).where(eq(users.id, id));
+    return result[0];
   }
 
-  getUserByUsername(username: string): User | undefined {
-    return db.select().from(users).where(eq(users.username, username)).get();
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const result = await db.select().from(users).where(eq(users.username, username));
+    return result[0];
   }
 
-  createUser(user: InsertUser): User {
-    return db.insert(users).values(user).returning().get();
+  async createUser(user: InsertUser): Promise<User> {
+    const result = await db.insert(users).values(user).returning();
+    return result[0];
   }
 }
 

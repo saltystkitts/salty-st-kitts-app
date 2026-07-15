@@ -1,9 +1,9 @@
 import type { Express } from "express";
 import type { Server } from "http";
 import { storage } from "./storage";
-import Database from "better-sqlite3";
-import path from "path";
-const sqlite = new Database(path.join(process.cwd(), "stkitts.db"));
+import { initDb, db } from "./db";
+import { appSettings } from "@shared/schema";
+import { eq } from "drizzle-orm";
 
 const ADMIN_PASSWORD = "salty2026";
 
@@ -155,40 +155,42 @@ const SEED_SALT_POSTS = [
 ];
 
 export async function registerRoutes(httpServer: Server, app: Express): Promise<Server> {
+  // ── Init PostgreSQL tables ──────────────────────────
+  await initDb();
+
   // ── Seed only if DB is empty ────────────────────────
-  // Force reseed is OFF — manual admin edits are preserved
-  const existingStops = storage.getAllStops();
+  const existingStops = await storage.getAllStops();
   if (existingStops.length === 0) {
     for (const stop of SEED_STOPS) {
-      storage.createStop({ ...stop, visible: true } as any);
+      await storage.createStop({ ...stop, visible: true } as any);
     }
   }
 
-  const existingPosts = storage.getAllSaltPosts();
+  const existingPosts = await storage.getAllSaltPosts();
   if (existingPosts.length === 0) {
     for (const post of SEED_SALT_POSTS) {
-      storage.createSaltPost(post as any);
+      await storage.createSaltPost(post as any);
     }
   }
 
   // ── Public API ─────────────────────────────────────────
-  app.get("/api/stops", (req, res) => {
+  app.get("/api/stops", async (req, res) => {
     const { category } = req.query;
     if (category && typeof category === "string" && category !== "all") {
-      return res.json(storage.getStopsByCategory(category));
+      return res.json(await storage.getStopsByCategory(category));
     }
-    return res.json(storage.getVisibleStops());
+    return res.json(await storage.getVisibleStops());
   });
 
-  app.get("/api/stops/:id", (req, res) => {
+  app.get("/api/stops/:id", async (req, res) => {
     const id = parseInt(req.params.id);
-    const stop = storage.getStop(id);
+    const stop = await storage.getStop(id);
     if (!stop) return res.status(404).json({ message: "Stop not found" });
     return res.json(stop);
   });
 
-  app.get("/api/salt-posts", (_req, res) => {
-    return res.json(storage.getVisibleSaltPosts());
+  app.get("/api/salt-posts", async (_req, res) => {
+    return res.json(await storage.getVisibleSaltPosts());
   });
 
   // ── Admin auth ─────────────────────────────────────────
@@ -201,88 +203,88 @@ export async function registerRoutes(httpServer: Server, app: Express): Promise<
   });
 
   // ── Admin: Stops CRUD ──────────────────────────────────
-  app.get("/api/admin/stops", (req, res) => {
+  app.get("/api/admin/stops", async (req, res) => {
     if (!checkAdmin(req)) return res.status(401).json({ message: "Unauthorized" });
-    return res.json(storage.getAllStops());
+    return res.json(await storage.getAllStops());
   });
 
-  app.post("/api/admin/stops", (req, res) => {
+  app.post("/api/admin/stops", async (req, res) => {
     if (!checkAdmin(req)) return res.status(401).json({ message: "Unauthorized" });
-    const stop = storage.createStop(req.body);
+    const stop = await storage.createStop(req.body);
     return res.json(stop);
   });
 
-  app.put("/api/admin/stops/:id", (req, res) => {
+  app.put("/api/admin/stops/:id", async (req, res) => {
     if (!checkAdmin(req)) return res.status(401).json({ message: "Unauthorized" });
     const id = parseInt(req.params.id);
-    const stop = storage.updateStop(id, req.body);
+    const stop = await storage.updateStop(id, req.body);
     if (!stop) return res.status(404).json({ message: "Stop not found" });
     return res.json(stop);
   });
 
-  app.delete("/api/admin/stops/:id", (req, res) => {
+  app.delete("/api/admin/stops/:id", async (req, res) => {
     if (!checkAdmin(req)) return res.status(401).json({ message: "Unauthorized" });
-    storage.deleteStop(parseInt(req.params.id));
+    await storage.deleteStop(parseInt(req.params.id));
     return res.json({ ok: true });
   });
 
   // ── Admin: Salt Posts CRUD ─────────────────────────────
-  app.get("/api/admin/salt-posts", (req, res) => {
+  app.get("/api/admin/salt-posts", async (req, res) => {
     if (!checkAdmin(req)) return res.status(401).json({ message: "Unauthorized" });
-    return res.json(storage.getAllSaltPosts());
+    return res.json(await storage.getAllSaltPosts());
   });
 
-  app.post("/api/admin/salt-posts", (req, res) => {
+  app.post("/api/admin/salt-posts", async (req, res) => {
     if (!checkAdmin(req)) return res.status(401).json({ message: "Unauthorized" });
-    const post = storage.createSaltPost(req.body);
+    const post = await storage.createSaltPost(req.body);
     return res.json(post);
   });
 
-  app.put("/api/admin/salt-posts/:id", (req, res) => {
+  app.put("/api/admin/salt-posts/:id", async (req, res) => {
     if (!checkAdmin(req)) return res.status(401).json({ message: "Unauthorized" });
     const id = parseInt(req.params.id);
-    const post = storage.updateSaltPost(id, req.body);
+    const post = await storage.updateSaltPost(id, req.body);
     if (!post) return res.status(404).json({ message: "Post not found" });
     return res.json(post);
   });
 
-  app.delete("/api/admin/salt-posts/:id", (req, res) => {
+  app.delete("/api/admin/salt-posts/:id", async (req, res) => {
     if (!checkAdmin(req)) return res.status(401).json({ message: "Unauthorized" });
-    storage.deleteSaltPost(parseInt(req.params.id));
+    await storage.deleteSaltPost(parseInt(req.params.id));
     return res.json({ ok: true });
   });
 
   // ── Public: validate unlock code ───────────────────────
-  app.post("/api/unlock", (req, res) => {
+  app.post("/api/unlock", async (req, res) => {
     const { code } = req.body;
     if (!code) return res.status(400).json({ valid: false });
     const cleaned = (code as string).trim().toUpperCase();
-    const paid    = sqlite.prepare(`SELECT value FROM app_settings WHERE key = 'unlock_code_paid'`).get() as { value: string } | undefined;
-    const friends = sqlite.prepare(`SELECT value FROM app_settings WHERE key = 'unlock_code_friends'`).get() as { value: string } | undefined;
-    const stripeRow = sqlite.prepare(`SELECT value FROM app_settings WHERE key = 'stripe_link'`).get() as { value: string } | undefined;
-    const valid = cleaned === paid?.value?.toUpperCase() || cleaned === friends?.value?.toUpperCase();
-    return res.json({ valid, stripeLink: stripeRow?.value ?? '' });
+    const rows = await db.select().from(appSettings);
+    const settings: Record<string, string> = {};
+    rows.forEach((r: { key: string; value: string }) => settings[r.key] = r.value);
+    const valid = cleaned === settings["unlock_code_paid"]?.toUpperCase() || cleaned === settings["unlock_code_friends"]?.toUpperCase();
+    return res.json({ valid, stripeLink: settings["stripe_link"] ?? "" });
   });
 
   // ── Public: get Stripe link ────────────────────────────
-  app.get("/api/stripe-link", (_req, res) => {
-    const row = sqlite.prepare(`SELECT value FROM app_settings WHERE key = 'stripe_link'`).get() as { value: string } | undefined;
-    return res.json({ stripeLink: row?.value ?? '' });
+  app.get("/api/stripe-link", async (_req, res) => {
+    const rows = await db.select().from(appSettings).where(eq(appSettings.key, "stripe_link"));
+    return res.json({ stripeLink: rows[0]?.value ?? "" });
   });
 
   // ── Admin: manage unlock codes ─────────────────────────
-  app.get("/api/admin/settings", (req, res) => {
+  app.get("/api/admin/settings", async (req, res) => {
     if (!checkAdmin(req)) return res.status(401).json({ message: "Unauthorized" });
-    const rows = sqlite.prepare(`SELECT key, value FROM app_settings`).all() as { key: string; value: string }[];
+    const rows = await db.select().from(appSettings);
     const settings: Record<string, string> = {};
-    rows.forEach(r => settings[r.key] = r.value);
+    rows.forEach((r: { key: string; value: string }) => settings[r.key] = r.value);
     return res.json(settings);
   });
 
-  app.put("/api/admin/settings", (req, res) => {
+  app.put("/api/admin/settings", async (req, res) => {
     if (!checkAdmin(req)) return res.status(401).json({ message: "Unauthorized" });
     const { key, value } = req.body;
-    sqlite.prepare(`INSERT OR REPLACE INTO app_settings (key, value) VALUES (?, ?)`).run(key, value);
+    await db.insert(appSettings).values({ key, value }).onConflictDoUpdate({ target: appSettings.key, set: { value } });
     return res.json({ ok: true });
   });
 

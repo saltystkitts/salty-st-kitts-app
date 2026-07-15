@@ -1,9 +1,9 @@
-import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
+import { pgTable, text, integer, real, boolean, serial } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const stops = sqliteTable("stops", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const stops = pgTable("stops", {
+  id: serial("id").primaryKey(),
   name: text("name").notNull(),
   category: text("category").notNull(),
   description: text("description").notNull(),
@@ -12,42 +12,41 @@ export const stops = sqliteTable("stops", {
   lat: real("lat").notNull(),
   lng: real("lng").notNull(),
   area: text("area").notNull(),
-  featured: integer("featured", { mode: "boolean" }).notNull().default(false),
-  visible: integer("visible", { mode: "boolean" }).notNull().default(true),
+  featured: boolean("featured").notNull().default(false),
+  visible: boolean("visible").notNull().default(true),
   imageUrl: text("image_url"),
-  // Local intel attributes
-  parking: text("parking"),        // easy | limited | street | none
-  smoking: text("smoking"),        // cigarettes | weed | both | outside | no
-  kidsOk: text("kids_ok"),         // yes | no | depends
-  wifi: text("wifi"),              // free | ask | no
-  payment: text("payment"),        // cash | card | both
-  dresscode: text("dresscode"),    // anything | beach | smart
-  bestTime: text("best_time"),     // morning | afternoon | evening | latenight
-  vibe: text("vibe"),             // chill | lively | local | mixed | tourist
-  closedNote: text("closed_note"),  // if set, shows closed banner with this text (can include URL)
+  parking: text("parking"),
+  smoking: text("smoking"),
+  kidsOk: text("kids_ok"),
+  wifi: text("wifi"),
+  payment: text("payment"),
+  dresscode: text("dresscode"),
+  bestTime: text("best_time"),
+  vibe: text("vibe"),
+  closedNote: text("closed_note"),
 });
 
 export const insertStopSchema = createInsertSchema(stops).omit({ id: true });
 export type InsertStop = z.infer<typeof insertStopSchema>;
 export type Stop = typeof stops.$inferSelect;
 
-export const saltPosts = sqliteTable("salt_posts", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const saltPosts = pgTable("salt_posts", {
+  id: serial("id").primaryKey(),
   title: text("title").notNull(),
   date: text("date").notNull(),
   preview: text("preview").notNull(),
   body: text("body").notNull(),
   emoji: text("emoji").notNull().default("🌊"),
   tag: text("tag").notNull().default("Local Tips"),
-  visible: integer("visible", { mode: "boolean" }).notNull().default(true),
+  visible: boolean("visible").notNull().default(true),
 });
 
 export const insertSaltPostSchema = createInsertSchema(saltPosts).omit({ id: true });
 export type InsertSaltPost = z.infer<typeof insertSaltPostSchema>;
 export type SaltPost = typeof saltPosts.$inferSelect;
 
-export const users = sqliteTable("users", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
 });
@@ -58,3 +57,8 @@ export const insertUserSchema = createInsertSchema(users).pick({
 });
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
+
+export const appSettings = pgTable("app_settings", {
+  key: text("key").primaryKey(),
+  value: text("value").notNull(),
+});
