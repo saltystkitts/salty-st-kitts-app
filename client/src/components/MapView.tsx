@@ -39,7 +39,7 @@ export function MapView({ stops, selectedStop, center, zoom, onPinClick }: Props
 
     L.control.zoom({ position: "bottomright" }).addTo(map);
 
-    L.tileLayer("https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}", {
+    L.tileLayer("https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}", {
       attribution: '&copy; <a href="https://maps.google.com" target="_blank">Google Maps</a>',
       subdomains: "0123",
       maxZoom: 20,
