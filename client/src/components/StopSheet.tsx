@@ -129,6 +129,9 @@ export function StopSheet({ stop, onClose }: Props) {
           </button>
         </div>
 
+        {stop.imageUrl && (
+          <img src={stop.imageUrl} alt={stop.name} className="w-full h-48 object-cover" />
+        )}
         <div className="px-5 py-4 space-y-4">
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" />{stop.duration}</span>

@@ -4,6 +4,27 @@ import { storage } from "./storage";
 import { initDb, db } from "./db";
 import { appSettings } from "@shared/schema";
 import { eq } from "drizzle-orm";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+
+const uploadDir = path.join(process.cwd(), "uploads");
+if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: uploadDir,
+    filename: (_req, file, cb) => {
+      const unique = Date.now() + "-" + Math.round(Math.random() * 1e9);
+      cb(null, unique + path.extname(file.originalname));
+    },
+  }),
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
+  fileFilter: (_req, file, cb) => {
+    const allowed = /jpeg|jpg|png|webp|gif/;
+    cb(null, allowed.test(file.mimetype));
+  },
+});
 
 const ADMIN_PASSWORD = "salty2026";
 
@@ -287,6 +308,23 @@ export async function registerRoutes(httpServer: Server, app: Express): Promise<
     await db.insert(appSettings).values({ key, value }).onConflictDoUpdate({ target: appSettings.key, set: { value } });
     return res.json({ ok: true });
   });
+
+  // ── Image upload ───────────────────────────────────
+  app.post("/api/admin/upload", (req, res) => {
+    if (!checkAdmin(req)) return res.status(401).json({ message: "Unauthorized" });
+    upload.single("image")(req, res, (err) => {
+      if (err) return res.status(400).json({ message: err.message });
+      if (!req.file) return res.status(400).json({ message: "No file" });
+      const url = `/uploads/${req.file.filename}`;
+      return res.json({ url });
+    });
+  });
+
+  // Serve uploaded images
+  app.use("/uploads", (req, res, next) => {
+    res.setHeader("Cache-Control", "public, max-age=31536000");
+    next();
+  }, require("express").static(uploadDir));
 
   return httpServer;
 }

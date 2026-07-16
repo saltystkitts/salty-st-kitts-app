@@ -156,6 +156,43 @@ function StopRow({ stop, onUpdate, onDelete }: { stop: any; onUpdate: () => void
           onChange={e => setForm({ ...form, tip: e.target.value })}
           placeholder="Salty's tip"
         />
+        {/* Image upload */}
+        <p className="text-xs font-bold text-muted-foreground uppercase tracking-wide pt-1">Photo</p>
+        {form.imageUrl && (
+          <img src={form.imageUrl} alt="stop" className="w-full h-40 object-cover rounded-lg" />
+        )}
+        <div className="flex gap-2 items-center">
+          <label className="flex-1 cursor-pointer">
+            <div className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm text-muted-foreground text-center hover:bg-muted transition-colors">
+              {form.imageUrl ? "Change Photo" : "📷 Upload Photo"}
+            </div>
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                const fd = new FormData();
+                fd.append("image", file);
+                const res = await fetch("/api/admin/upload", {
+                  method: "POST",
+                  headers: { "x-admin-password": "salty2026" },
+                  body: fd,
+                });
+                const data = await res.json();
+                if (data.url) setForm({ ...form, imageUrl: data.url });
+              }}
+            />
+          </label>
+          {form.imageUrl && (
+            <button
+              onClick={() => setForm({ ...form, imageUrl: "" })}
+              className="px-3 py-2 rounded-lg border border-border text-sm text-destructive hover:bg-destructive/10"
+            >Remove</button>
+          )}
+        </div>
+
         <div className="flex gap-2">
           <input
             className="flex-1 px-3 py-2 rounded-lg border border-border bg-background text-sm text-foreground"

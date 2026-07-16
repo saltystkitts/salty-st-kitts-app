@@ -25,13 +25,21 @@ export function StopCard({ stop, isSelected, onClick }: Props) {
         }
       `}
     >
-      {/* Category icon badge */}
-      <div
-        className="w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0 text-lg"
-        style={{ background: config.bgColor }}
-      >
-        {config.emoji}
-      </div>
+      {/* Photo or category icon */}
+      {stop.imageUrl ? (
+        <img
+          src={stop.imageUrl}
+          alt={stop.name}
+          className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
+        />
+      ) : (
+        <div
+          className="w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0 text-lg"
+          style={{ background: config.bgColor }}
+        >
+          {config.emoji}
+        </div>
+      )}
 
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-2">
