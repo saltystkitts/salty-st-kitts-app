@@ -9,7 +9,7 @@ export default function HolidaysPage() {
     { date: "Aug",      name: "Emancipation Day",  note: "First Monday in August" },
     { date: "Aug",      name: "Culturama Day",     note: "Nevis — first Tuesday after Emancipation Monday" },
     { date: "Sep 19",   name: "Independence Day",  note: "National holiday — big celebrations island-wide" },
-    { date: "Nov",      name: "National Heroes Day", note: "Observed in November" },
+    { date: "Nov 17",   name: "National Heroes Day", note: "Observed November 17th" },
     { date: "Dec 25",   name: "Christmas Day" },
     { date: "Dec 26",   name: "Boxing Day" },
   ];
@@ -28,7 +28,7 @@ export default function HolidaysPage() {
         "Street food, rum, and dancing until the sun comes up",
         "Last Lap on January 2nd closes it all out",
       ],
-      tip: "If you are on island for Carnival, clear your schedule. J'ouvert starts around 4am and that's not a joke — show up.",
+      tip: "J'ouvert is the street party on Boxing Day (December 26th), starting at 4am. No special costume needed — just show up. To join a costumed troupe and 'play mas,' check Instagram for the different troops — options vary each year and it's not cheap. For all Carnival events, take a taxi or 'Uber' in — parking is a disaster and you'll want both hands free.",
     },
     {
       emoji: "🎵",
@@ -43,7 +43,7 @@ export default function HolidaysPage() {
         "Warner Park Stadium, Basseterre",
         "Street food vendors and bars around the venue",
       ],
-      tip: "Book accommodation well in advance — the island fills up fast during Music Fest weekend. Friday night tends to have the best lineup.",
+      tip: "Book accommodation early — the island fills up fast during Music Fest weekend and prices spike. Friday night tends to have the best lineup.",
     },
   ];
 
@@ -55,6 +55,14 @@ export default function HolidaysPage() {
         <div>
           <h1 className="text-xl font-bold" style={{ color: "#1AAFCC" }}>Holidays & Events</h1>
           <p className="text-sm text-muted-foreground mt-1">The St Kitts calendar — what's happening and when.</p>
+        </div>
+
+        {/* Holiday closure warning */}
+        <div className="rounded-2xl border border-amber-300 dark:border-amber-700 p-4" style={{ background: "#FFF8E7" }}>
+          <p className="font-bold text-sm text-amber-800 dark:text-amber-400 mb-1">⚠️ We Take Our Holidays Seriously</p>
+          <p className="text-sm text-amber-900 dark:text-amber-300 leading-relaxed">
+            On public holidays, <strong>most businesses will be closed</strong> — including gas stations, grocery stores, pharmacies, and banks. Plan ahead. Stock up the day before. Don't assume anything will be open, because chances are it won't be. This is not a complaint — it's island life at its finest.
+          </p>
         </div>
 
         {/* Big Events */}

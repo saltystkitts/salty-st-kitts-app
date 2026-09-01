@@ -17,7 +17,7 @@ const MORE_TABS: { id: AppTab; label: string; icon: React.ComponentType<{ classN
   { id: "taxi",         label: "Taxis",    icon: Car },
   { id: "holidays",     label: "Holidays", icon: CalendarDays },
   { id: "weather",      label: "Weather",  icon: CloudSun },
-  { id: "ferry",        label: "Ferry",    icon: Ship },
+  { id: "ferry",        label: "By Water", icon: Ship },
 ];
 
 interface Props {

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Wind, Droplets, Eye, Thermometer, RefreshCw } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -49,7 +50,11 @@ function dayLabel(dateStr: string, index: number): string {
   return new Date(dateStr).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
 }
 
+function toF(c: number): number { return Math.round(c * 9 / 5 + 32); }
+
 export default function WeatherPage() {
+  const [useFahrenheit, setUseFahrenheit] = useState(true);
+
   const { data, isLoading, error, refetch, dataUpdatedAt } = useQuery<WeatherData>({
     queryKey: ["weather-stkitts"],
     queryFn: () =>
@@ -66,6 +71,8 @@ export default function WeatherPage() {
   const current = data?.current;
   const daily = data?.daily;
   const weather = current ? wmoDescription(current.weather_code) : null;
+
+  const fmt = (c: number) => useFahrenheit ? `${toF(c)}°F` : `${Math.round(c)}°C`;
 
   return (
     <div className="flex flex-col h-full overflow-hidden bg-background">
@@ -84,26 +91,35 @@ export default function WeatherPage() {
               <>
                 <div className="flex items-end gap-3">
                   <span className="text-6xl font-bold text-white leading-none">
-                    {Math.round(current.temperature_2m)}°
+                    {useFahrenheit ? toF(current.temperature_2m) : Math.round(current.temperature_2m)}°
                   </span>
                   <span className="text-4xl mb-1">{weather.emoji}</span>
                 </div>
                 <p className="text-white font-semibold mt-1">{weather.desc}</p>
                 <p className="text-sm mt-0.5" style={{ color: "#1AAFCC" }}>
-                  Feels like {Math.round(current.apparent_temperature)}°C
+                  Feels like {fmt(current.apparent_temperature)}
                 </p>
               </>
             ) : null}
           </div>
 
-          <button
-            onClick={() => refetch()}
-            className="p-2 rounded-lg transition-colors"
-            style={{ color: "#1AAFCC" }}
-            data-testid="weather-refresh"
-          >
-            <RefreshCw className="w-4 h-4" />
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setUseFahrenheit(f => !f)}
+              className="px-3 py-1 rounded-lg text-xs font-bold border transition-all"
+              style={{ borderColor: "#1AAFCC", color: "#1AAFCC", background: "rgba(26,175,204,0.15)" }}
+            >
+              °{useFahrenheit ? "F" : "C"}
+            </button>
+            <button
+              onClick={() => refetch()}
+              className="p-2 rounded-lg transition-colors"
+              style={{ color: "#1AAFCC" }}
+              data-testid="weather-refresh"
+            >
+              <RefreshCw className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         {/* Stats row */}
@@ -160,8 +176,8 @@ export default function WeatherPage() {
                     <span className="text-2xl">{w.emoji}</span>
                     <p className="text-xs text-muted-foreground w-20 text-center">{w.desc}</p>
                     <div className="text-right">
-                      <span className="text-sm font-bold text-foreground">{Math.round(daily.temperature_2m_max[i])}°</span>
-                      <span className="text-sm text-muted-foreground"> / {Math.round(daily.temperature_2m_min[i])}°</span>
+                      <span className="text-sm font-bold text-foreground">{useFahrenheit ? toF(daily.temperature_2m_max[i]) : Math.round(daily.temperature_2m_max[i])}°</span>
+                      <span className="text-sm text-muted-foreground"> / {useFahrenheit ? toF(daily.temperature_2m_min[i]) : Math.round(daily.temperature_2m_min[i])}°</span>
                     </div>
                   </div>
                 );
@@ -172,7 +188,7 @@ export default function WeatherPage() {
           {/* Salty weather note */}
           <div className="mt-4 p-3.5 rounded-xl border border-card-border bg-card">
             <p className="text-xs text-muted-foreground leading-relaxed italic">
-              🧂 <strong>The Salty take on St Kitts weather:</strong> It's the Caribbean. It's going to be warm. It might rain for 20 minutes in the afternoon and then be perfect again. Pack sunscreen, not an umbrella.
+              🧂 <strong>The Salty take on St Kitts weather:</strong> It's the Caribbean — warm, sunny, and occasionally dramatic. Expect temperatures in the mid-80s°F year-round, with brief afternoon showers that usually clear within 20 minutes. Hurricane season runs June through November, but direct hits are rare. Pack sunscreen and a light layer for the AC. You won't need an umbrella, but you'll definitely need the sunscreen.
             </p>
           </div>
           <div className="h-4" />
