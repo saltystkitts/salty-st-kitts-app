@@ -97,8 +97,8 @@ export default function TaxiPage() {
               <span>📍</span>
               <div>
                 <strong>Frigate Bay Stand</strong> — near the main road on the Strip
-                <a href="tel:8694655621" className="block mt-0.5 font-semibold" style={{ color: "#1AAFCC" }}>
-                  <Phone className="w-3.5 h-3.5 inline mr-1" />869-465-5621
+                <a href="tel:8694654317" className="block mt-0.5 font-semibold" style={{ color: "#1AAFCC" }}>
+                  <Phone className="w-3.5 h-3.5 inline mr-1" />869-465-4317
                 </a>
               </div>
             </div>

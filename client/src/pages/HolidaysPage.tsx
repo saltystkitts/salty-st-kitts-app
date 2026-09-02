@@ -1,17 +1,17 @@
 export default function HolidaysPage() {
   const publicHolidays = [
     { date: "Jan 1",    name: "New Year's Day" },
-    { date: "Jan 2",    name: "Carnival Last Lap", note: "Rolls over from Carnival season" },
-    { date: "Mar/Apr",  name: "Good Friday",       note: "Date varies" },
-    { date: "Mar/Apr",  name: "Easter Monday",     note: "Date varies" },
-    { date: "May 1",    name: "Labour Day" },
-    { date: "May/Jun",  name: "Whit Monday",       note: "Date varies" },
-    { date: "Aug",      name: "Emancipation Day",  note: "First Monday in August" },
-    { date: "Aug",      name: "Culturama Day",     note: "Nevis — first Tuesday after Emancipation Monday" },
-    { date: "Sep 19",   name: "Independence Day",  note: "National holiday — big celebrations island-wide" },
-    { date: "Sep 16",   name: "National Heroes Day", note: "Observed September 16th" },
+    { date: "Jan 2",    name: "Carnival Day (Last Lap)", note: "Final day of Carnival season" },
+    { date: "Mar/Apr",  name: "Good Friday",             note: "Date varies" },
+    { date: "Mar/Apr",  name: "Easter Monday",           note: "Date varies" },
+    { date: "May",      name: "Labour Day",              note: "First Monday in May" },
+    { date: "May/Jun",  name: "Whit Monday",             note: "Date varies" },
+    { date: "Aug",      name: "Emancipation Day",        note: "First Monday in August" },
+    { date: "Aug",      name: "Culturama Day",           note: "Nevis — first Tuesday after Emancipation Monday" },
+    { date: "Sep 16",   name: "National Heroes Day" },
+    { date: "Sep 19",   name: "Independence Day",        note: "Big celebrations island-wide" },
     { date: "Dec 25",   name: "Christmas Day" },
-    { date: "Dec 26",   name: "Boxing Day" },
+    { date: "Dec 26",   name: "Boxing Day / J'ouvert" },
   ];
 
   const bigEvents = [
