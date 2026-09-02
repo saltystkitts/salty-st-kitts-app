@@ -9,7 +9,7 @@ export default function HolidaysPage() {
     { date: "Aug",      name: "Emancipation Day",  note: "First Monday in August" },
     { date: "Aug",      name: "Culturama Day",     note: "Nevis — first Tuesday after Emancipation Monday" },
     { date: "Sep 19",   name: "Independence Day",  note: "National holiday — big celebrations island-wide" },
-    { date: "Nov 17",   name: "National Heroes Day", note: "Observed November 17th" },
+    { date: "Sep 16",   name: "National Heroes Day", note: "Observed September 16th" },
     { date: "Dec 25",   name: "Christmas Day" },
     { date: "Dec 26",   name: "Boxing Day" },
   ];
