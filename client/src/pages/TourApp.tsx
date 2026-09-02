@@ -16,7 +16,7 @@ export type Category = "all" | "historical" | "nature" | "food_nightlife" | "bea
 const EMPTY_MESSAGES: Record<Category, string> = {
   all: "Somehow we have no stops. That's impressive.",
   historical: "No history here. Fresh start.",
-  nature: "Nothing in nature? On a volcanic island? Come on.",
+  nature: "Nothing in The Bush? On a volcanic island? Come on.",
   food_nightlife: "No food or rum?! That's a crisis. Refresh the page.",
   beach: "No beaches found. Are you sure you're on St Kitts?",
   scenic_drive: "No drives? Just pick a direction and go.",
@@ -28,7 +28,7 @@ const EMPTY_MESSAGES: Record<Category, string> = {
 const SUBTEXT: Record<Category, string> = {
   all: "Every spot worth your time on this rock",
   historical: "Where the bodies are buried (historically speaking)",
-  nature: "Volcanoes, monkeys & jungle stuff",
+  nature: "Trails, trailheads & jungle stuff",
   food_nightlife: "Rum, fish & bad decisions",
   beach: "Sand between your toes, Nevis in your face",
   scenic_drive: "Put it in drive and shut up",
