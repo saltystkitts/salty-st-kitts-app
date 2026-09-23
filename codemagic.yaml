@@ -31,10 +31,10 @@ workflows:
           cd ios/App
           pod install
 
-      - name: Set build number from Codemagic
+      - name: Set build number
         script: |
           cd ios/App
-          agvtool new-version -all $(($(app-store-connect get-latest-app-store-build-number "$APP_STORE_APPLE_ID" 2>/dev/null || echo 0) + 1))
+          agvtool new-version -all $(($BUILD_NUMBER + 1))
 
       - name: Fetch signing files
         script: |
