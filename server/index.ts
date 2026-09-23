@@ -4,6 +4,20 @@ import { serveStatic } from "./static";
 import { createServer } from "http";
 
 const app = express();
+
+// Allow the native iOS/Android app (Capacitor webview) to call the API.
+const NATIVE_ORIGINS = new Set(["capacitor://localhost", "ionic://localhost", "http://localhost", "https://localhost"]);
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin && NATIVE_ORIGINS.has(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Vary", "Origin");
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, x-admin-password");
+  }
+  if (req.method === "OPTIONS") return res.sendStatus(204);
+  next();
+});
 const httpServer = createServer(app);
 
 declare module "http" {
