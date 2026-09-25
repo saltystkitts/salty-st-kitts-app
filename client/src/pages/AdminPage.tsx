@@ -1,3 +1,4 @@
+import { imgSrc } from "../lib/nativeApi";
 import { useState, useEffect } from "react";
 import { Lock, LogOut, MapPin, Waves, Eye, EyeOff, Pencil, Trash2, Plus, Check, X } from "lucide-react";
 
@@ -159,7 +160,7 @@ function StopRow({ stop, onUpdate, onDelete }: { stop: any; onUpdate: () => void
         {/* Image upload */}
         <p className="text-xs font-bold text-muted-foreground uppercase tracking-wide pt-1">Photo</p>
         {form.imageUrl && (
-          <img src={form.imageUrl} alt="stop" className="w-full h-40 object-cover rounded-lg" />
+          <img src={imgSrc(form.imageUrl)} alt="stop" className="w-full h-40 object-cover rounded-lg" />
         )}
         <div className="flex gap-2 items-center">
           <label className="flex-1 cursor-pointer">
@@ -182,6 +183,7 @@ function StopRow({ stop, onUpdate, onDelete }: { stop: any; onUpdate: () => void
                 });
                 const data = await res.json();
                 if (data.url) setForm({ ...form, imageUrl: data.url });
+                else alert("Photo upload failed: " + (data.message || "unknown error"));
               }}
             />
           </label>

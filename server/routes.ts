@@ -5,24 +5,16 @@ import { initDb, db } from "./db";
 import { appSettings } from "@shared/schema";
 import { eq } from "drizzle-orm";
 import multer from "multer";
-import path from "path";
-import fs from "fs";
 
-const uploadDir = path.join(process.cwd(), "uploads");
-if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+import sharp from "sharp";
+import { pool } from "./db";
 
+// Photos are stored in PostgreSQL (persists across Railway redeploys).
 const upload = multer({
-  storage: multer.diskStorage({
-    destination: uploadDir,
-    filename: (_req, file, cb) => {
-      const unique = Date.now() + "-" + Math.round(Math.random() * 1e9);
-      cb(null, unique + path.extname(file.originalname));
-    },
-  }),
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 25 * 1024 * 1024 }, // 25MB raw phone photos
   fileFilter: (_req, file, cb) => {
-    const allowed = /jpeg|jpg|png|webp|gif/;
-    cb(null, allowed.test(file.mimetype));
+    cb(null, /^image\//.test(file.mimetype));
   },
 });
 
@@ -309,22 +301,39 @@ export async function registerRoutes(httpServer: Server, app: Express): Promise<
     return res.json({ ok: true });
   });
 
-  // ── Image upload ───────────────────────────────────
+  // ── Image upload (stored in Postgres) ───────────────
   app.post("/api/admin/upload", (req, res) => {
     if (!checkAdmin(req)) return res.status(401).json({ message: "Unauthorized" });
-    upload.single("image")(req, res, (err) => {
+    upload.single("image")(req, res, async (err) => {
       if (err) return res.status(400).json({ message: err.message });
       if (!req.file) return res.status(400).json({ message: "No file" });
-      const url = `/uploads/${req.file.filename}`;
-      return res.json({ url });
+      try {
+        const data = await sharp(req.file.buffer)
+          .rotate() // respect phone orientation
+          .resize({ width: 1600, height: 1600, fit: "inside", withoutEnlargement: true })
+          .webp({ quality: 80 })
+          .toBuffer();
+        const r = await pool.query(
+          "INSERT INTO images (mime, data) VALUES ($1, $2) RETURNING id",
+          ["image/webp", data],
+        );
+        return res.json({ url: `/api/images/${r.rows[0].id}` });
+      } catch (e: any) {
+        return res.status(400).json({ message: "Could not process image: " + e.message });
+      }
     });
   });
 
-  // Serve uploaded images
-  app.use("/uploads", (req, res, next) => {
-    res.setHeader("Cache-Control", "public, max-age=31536000");
-    next();
-  }, require("express").static(uploadDir));
+  // Serve stored images
+  app.get("/api/images/:id", async (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    if (!id) return res.sendStatus(404);
+    const r = await pool.query("SELECT mime, data FROM images WHERE id = $1", [id]);
+    if (!r.rows.length) return res.sendStatus(404);
+    res.setHeader("Content-Type", r.rows[0].mime);
+    res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+    return res.send(r.rows[0].data);
+  });
 
   return httpServer;
 }

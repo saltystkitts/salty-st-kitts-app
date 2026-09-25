@@ -1,3 +1,4 @@
+import { imgSrc } from "../lib/nativeApi";
 import type { Stop } from "@shared/schema";
 import { X, Clock, MapPin, Lightbulb, Navigation, ParkingCircle, Cigarette, Baby, Wifi, CreditCard, Shirt, Sun, Music } from "lucide-react";
 import { CATEGORY_CONFIG } from "../lib/categories";
@@ -130,7 +131,7 @@ export function StopSheet({ stop, onClose }: Props) {
         </div>
 
         {stop.imageUrl && (
-          <img src={stop.imageUrl} alt={stop.name} className="w-full h-48 object-cover" />
+          <img src={imgSrc(stop.imageUrl)} alt={stop.name} className="w-full h-48 object-cover" />
         )}
         <div className="px-5 py-4 space-y-4">
           <div className="flex items-center gap-4 text-sm text-muted-foreground">

@@ -36,3 +36,10 @@ export function installNativeApiBridge() {
 export function isNative() {
   return Capacitor.isNativePlatform();
 }
+
+/** Turn a stored image path (e.g. /api/images/12) into a URL that works in the browser and the native app. */
+export function imgSrc(url?: string | null): string | undefined {
+  if (!url) return undefined;
+  if (url.startsWith("/") && Capacitor.isNativePlatform()) return API_ORIGIN + url;
+  return url;
+}

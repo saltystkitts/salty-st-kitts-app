@@ -1,3 +1,4 @@
+import { imgSrc } from "../lib/nativeApi";
 import type { Stop } from "@shared/schema";
 import { Clock, MapPin, Star } from "lucide-react";
 import { CATEGORY_CONFIG } from "../lib/categories";
@@ -28,7 +29,7 @@ export function StopCard({ stop, isSelected, onClick }: Props) {
       {/* Photo or category icon */}
       {stop.imageUrl ? (
         <img
-          src={stop.imageUrl}
+          src={imgSrc(stop.imageUrl)}
           alt={stop.name}
           className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
         />
