@@ -18,7 +18,6 @@ const CATEGORIES = [
   { value: "nature", label: "The Bush" },
   { value: "food_nightlife", label: "Lime & Dine" },
   { value: "beach", label: "Beaches" },
-  { value: "scenic_drive", label: "Drives" },
   { value: "loot", label: "Loot" },
 ];
 

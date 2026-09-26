@@ -49,7 +49,6 @@ export default function UnlockScreen({ onDismiss }: { onDismiss?: () => void }) 
                 <p className="text-[10px] font-bold uppercase tracking-wide mb-1.5" style={{ color: "rgba(255,255,255,0.4)" }}>Free</p>
                 <div className="space-y-1.5 text-xs text-white/70">
                   <div>🗺️ Map with pins</div>
-                  <div>🚗 Scenic drives</div>
                   <div>🌊 The Salt</div>
                 </div>
               </div>
@@ -57,7 +56,6 @@ export default function UnlockScreen({ onDismiss }: { onDismiss?: () => void }) 
                 <p className="text-[10px] font-bold uppercase tracking-wide mb-1.5" style={{ color: "#1AAFCC" }}>Unlocked — $8.69</p>
                 <div className="space-y-1.5 text-xs text-white/80">
                   <div>✅ Full stop details</div>
-                  <div>✅ Action Tings</div>
                   <div>✅ Ferry, Taxi, Weather</div>
                   <div>✅ Explore By Area</div>
                   <div>✅ Audio tours soon</div>

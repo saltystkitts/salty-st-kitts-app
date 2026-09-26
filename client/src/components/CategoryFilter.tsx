@@ -7,10 +7,8 @@ const CATEGORIES: { value: Category; label: string; icon: React.ComponentType<{ 
   { value: "nature",       label: "The Bush",     icon: TreePine },
   { value: "food_nightlife",label: "Lime & Dine", icon: UtensilsCrossed },
   { value: "beach",        label: "Beaches",      icon: Waves },
-  { value: "scenic_drive", label: "Drives",       icon: Car },
   { value: "loot",         label: "Loot",         icon: ShoppingBag },
   { value: "the_salt",     label: "The Salt",     icon: Newspaper },
-  { value: "action_tings", label: "Action Tings", icon: Zap },
 ];
 
 interface Props {

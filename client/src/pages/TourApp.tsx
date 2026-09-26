@@ -8,7 +8,6 @@ import { CategoryFilter } from "../components/CategoryFilter";
 import { StopSheet, DesktopStopDetail } from "../components/StopSheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Map, X } from "lucide-react";
-import ActionTingsPage from "./ActionTingsPage";
 import TheSaltPage from "./TheSaltPage";
 
 export type Category = "all" | "historical" | "nature" | "food_nightlife" | "beach" | "scenic_drive" | "loot" | "the_salt" | "action_tings";

@@ -162,13 +162,6 @@ const VIBES = [
     categories: ["nature"],
   },
   {
-    id: "drive",
-    name: "Road Tripper",
-    emoji: "🚗",
-    subtitle: "Scenic drives & island loops",
-    categories: ["scenic_drive"],
-  },
-  {
     id: "shop",
     name: "Loot Hunter",
     emoji: "🛍️",

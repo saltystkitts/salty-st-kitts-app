@@ -11,14 +11,13 @@ import TourApp from "./pages/TourApp";
 import TheSaltPage from "./pages/TheSaltPage";
 import WeatherPage from "./pages/WeatherPage";
 import FerryPage from "./pages/FerryPage";
-import ActionTingsPage from "./pages/ActionTingsPage";
 import HolidaysPage from "./pages/HolidaysPage";
 import ExploreByAreaPage from "./pages/ExploreByAreaPage";
 import TaxiPage from "./pages/TaxiPage";
 import AdminPage from "./pages/AdminPage";
 
 // Pages that are free for everyone
-const FREE_TABS: AppTab[] = ["map", "salt", "actiontings"];
+const FREE_TABS: AppTab[] = ["map", "salt"];
 
 function MainApp() {
   const { unlocked } = useUnlock();
@@ -91,7 +90,6 @@ function MainApp() {
         {/* Free tabs — always available */}
         {tab === "map"        && <TourApp paywalled={!unlocked} onUpgrade={() => setShowPaywall(true)} />}
         {tab === "salt"       && <TheSaltPage />}
-        {tab === "actiontings" && <ActionTingsPage />}
 
         {/* Paid tabs — only render if unlocked */}
         {unlocked && tab === "weather"      && <WeatherPage />}
