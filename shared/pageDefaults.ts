@@ -178,6 +178,20 @@ export const PAGE_DEFAULTS = {
     footer: "Dates may shift year to year. Always verify locally.",
   },
 
+  action_tings: {
+    title: "Action Tings",
+    subtitle: "Get off the beach and do something",
+    activities: [
+      { name: "Orange Cat Charters", description: "Private boat and snorkel charters.", phone: "", website: "https://orangecatcharters.com" },
+      { name: "Jet Skis & Watersports", description: "Available at Frigate Bay and Cockleshell Bay.", phone: "", website: "" },
+      { name: "Learn Watersports", description: "To learn kiteboarding, sailing and more, contact **Beach Addiction St Kitts Nevis** on Facebook.", phone: "", website: "" },
+      { name: "Old Road Rum Tour", description: "Wingfield Estate, Old Road.", phone: "(869) 662-6888", website: "https://www.oldroadrum.com" },
+      { name: "City Shine Rum Distillery Tour", description: "", phone: "+1-869-760-4978", website: "https://www.sknrum.com" },
+      { name: "Zip Lining — Sky Safari Tours", description: "Wingfield rainforest.", phone: "+1 (869) 466-4259", website: "https://skysafaristkitts.com" },
+      { name: "Greg's Safaris", description: "4×4 Land Rover island safaris.", phone: "", website: "https://gregsafaris.com" },
+    ],
+  },
+
   weather: {
     salty_take: "It's the Caribbean — warm, sunny, and occasionally dramatic. Expect temperatures in the mid-80s°F year-round, with brief afternoon showers that usually clear within 20 minutes. Hurricane season runs June through November, but direct hits are rare. Pack sunscreen and a light layer for the AC. You won't need an umbrella, but you'll definitely need the sunscreen.",
   },
@@ -189,4 +203,5 @@ export const PAGE_LABELS: Record<PageKey, string> = {
   taxi: "Taxis",
   holidays: "Holidays",
   weather: "Weather",
+  action_tings: "Action Tings",
 };

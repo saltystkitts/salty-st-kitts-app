@@ -302,7 +302,7 @@ export async function registerRoutes(httpServer: Server, app: Express): Promise<
   });
 
   // ── Editable page content (By Water, Taxis, Holidays, Weather) ──
-  const PAGE_KEYS = new Set(["ferry", "taxi", "holidays", "weather"]);
+  const PAGE_KEYS = new Set(["ferry", "taxi", "holidays", "weather", "action_tings"]);
   app.get("/api/pages/:key", async (req, res) => {
     if (!PAGE_KEYS.has(req.params.key)) return res.sendStatus(404);
     const r = await pool.query("SELECT value FROM app_settings WHERE key = $1", ["page_" + req.params.key]);

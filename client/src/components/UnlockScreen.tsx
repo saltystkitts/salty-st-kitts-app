@@ -50,6 +50,7 @@ export default function UnlockScreen({ onDismiss }: { onDismiss?: () => void }) 
                 <div className="space-y-1.5 text-xs text-white/70">
                   <div>🗺️ Map with pins</div>
                   <div>🌊 The Salt</div>
+                  <div>⚡ Action Tings</div>
                 </div>
               </div>
               <div>
@@ -116,6 +117,10 @@ export default function UnlockScreen({ onDismiss }: { onDismiss?: () => void }) 
           >
             Continue with free version
           </button>
+
+          <p className="mt-4 text-[10px] leading-snug text-center text-white/35">
+            Nobody pays to be here. Everything's based on years of experience and preference, and subject to change.
+          </p>
         </div>
       </div>
     </div>

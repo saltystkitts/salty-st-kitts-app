@@ -89,6 +89,14 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
         <p className="text-xs text-muted-foreground font-medium italic">{SUBTEXT[category]}</p>
       </div>
 
+      {category === "beach" && (
+        <div className="px-4 py-2 border-b border-border shrink-0" style={{ background: "#1AAFCC14" }}>
+          <p className="text-xs leading-snug text-foreground/80">
+            🏖️ All beaches in St Kitts are free and open to the public. You may be charged for amenities, but you can always access the beach. Swim at your own risk and to your ability. Leave only footprints.
+          </p>
+        </div>
+      )}
+
       {/* Special full-page tabs — no map */}
       {(category === "the_salt" || category === "action_tings") && (
         <div className="flex-1 min-h-0 overflow-hidden flex flex-col items-center justify-center gap-4 px-8 text-center">
