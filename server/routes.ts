@@ -301,6 +301,31 @@ export async function registerRoutes(httpServer: Server, app: Express): Promise<
     return res.json({ ok: true });
   });
 
+  // ── Editable page content (By Water, Taxis, Holidays, Weather) ──
+  const PAGE_KEYS = new Set(["ferry", "taxi", "holidays", "weather"]);
+  app.get("/api/pages/:key", async (req, res) => {
+    if (!PAGE_KEYS.has(req.params.key)) return res.sendStatus(404);
+    const r = await pool.query("SELECT value FROM app_settings WHERE key = $1", ["page_" + req.params.key]);
+    if (!r.rows.length) return res.json({ content: null });
+    try { return res.json({ content: JSON.parse(r.rows[0].value) }); }
+    catch { return res.json({ content: null }); }
+  });
+  app.put("/api/admin/pages/:key", async (req, res) => {
+    if (!checkAdmin(req)) return res.status(401).json({ message: "Unauthorized" });
+    if (!PAGE_KEYS.has(req.params.key)) return res.sendStatus(404);
+    const value = JSON.stringify(req.body?.content ?? null);
+    await pool.query(
+      "INSERT INTO app_settings (key, value) VALUES ($1, $2) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value",
+      ["page_" + req.params.key, value],
+    );
+    return res.json({ ok: true });
+  });
+  app.delete("/api/admin/pages/:key", async (req, res) => {
+    if (!checkAdmin(req)) return res.status(401).json({ message: "Unauthorized" });
+    await pool.query("DELETE FROM app_settings WHERE key = $1", ["page_" + req.params.key]);
+    return res.json({ ok: true });
+  });
+
   // ── Image upload (stored in Postgres) ───────────────
   app.post("/api/admin/upload", (req, res) => {
     if (!checkAdmin(req)) return res.status(401).json({ message: "Unauthorized" });

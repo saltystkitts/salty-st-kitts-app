@@ -1,50 +1,11 @@
 import { useState } from "react";
+import { usePageContent, Rich, times as parseTimes } from "@/lib/pageContent";
 import { ArrowLeftRight, Anchor, Car, Phone, Clock, Waves } from "lucide-react";
 
 type Direction = "skn_to_nevis" | "nevis_to_skn";
 type TabType = "passenger" | "car" | "watertaxi";
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-
-const PASSENGER_SCHEDULE: Record<string, { skn_to_nevis: string[]; nevis_to_skn: string[] }> = {
-  Monday:    { skn_to_nevis: ["6:00 AM","7:00 AM","8:00 AM","8:45 AM","9:30 AM","10:15 AM","10:30 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","3:30 PM","4:00 PM","6:00 PM","7:00 PM"], nevis_to_skn: ["7:00 AM","7:30 AM","8:00 AM","8:30 AM","9:00 AM","9:30 AM","10:30 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM","4:30 PM","5:00 PM","6:00 PM"] },
-  Tuesday:   { skn_to_nevis: ["6:00 AM","7:00 AM","8:00 AM","8:45 AM","9:30 AM","10:15 AM","10:30 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","3:30 PM","4:00 PM","6:00 PM","7:00 PM"], nevis_to_skn: ["7:00 AM","7:30 AM","8:00 AM","8:30 AM","9:00 AM","9:30 AM","10:30 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM","4:30 PM","5:00 PM","6:00 PM"] },
-  Wednesday: { skn_to_nevis: ["6:00 AM","7:00 AM","8:00 AM","8:45 AM","9:30 AM","10:15 AM","10:30 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","3:30 PM","4:00 PM","6:00 PM","7:00 PM"], nevis_to_skn: ["7:00 AM","7:30 AM","8:00 AM","8:30 AM","9:00 AM","9:30 AM","10:30 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM","4:30 PM","5:00 PM","6:00 PM"] },
-  Thursday:  { skn_to_nevis: ["6:00 AM","7:00 AM","8:00 AM","8:45 AM","9:30 AM","10:15 AM","10:30 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","3:30 PM","4:00 PM","6:00 PM","7:00 PM"], nevis_to_skn: ["7:00 AM","7:30 AM","8:00 AM","8:30 AM","9:00 AM","9:30 AM","10:30 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM","4:30 PM","5:00 PM","6:00 PM"] },
-  Friday:    { skn_to_nevis: ["6:00 AM","7:00 AM","8:00 AM","8:45 AM","9:30 AM","10:15 AM","10:30 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","3:30 PM","4:00 PM","6:00 PM","7:00 PM","9:00 PM"], nevis_to_skn: ["7:00 AM","7:30 AM","8:00 AM","8:30 AM","9:00 AM","9:30 AM","10:30 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM","4:30 PM","5:00 PM","6:00 PM","8:00 PM"] },
-  Saturday:  { skn_to_nevis: ["6:30 AM","7:00 AM","7:30 AM","8:00 AM","8:45 AM","9:30 AM","10:15 AM","10:30 AM","12:00 PM","1:00 PM","2:00 PM","2:15 PM","3:00 PM","3:30 PM","4:00 PM","6:00 PM","7:00 PM","8:00 PM"], nevis_to_skn: ["7:00 AM","7:30 AM","8:00 AM","8:30 AM","9:00 AM","9:30 AM","10:30 AM","11:00 AM","12:00 PM","1:00 PM","2:15 PM","3:00 PM","4:00 PM","4:30 PM","5:00 PM","6:00 PM","8:00 PM","9:00 PM"] },
-  Sunday:    { skn_to_nevis: ["8:00 AM","9:00 AM","10:00 AM","12:00 PM","2:00 PM","4:00 PM","6:00 PM","7:00 PM"], nevis_to_skn: ["7:00 AM","8:00 AM","9:00 AM","11:00 AM","12:00 PM","1:00 PM","3:00 PM","4:30 PM","5:00 PM","6:00 PM"] },
-};
-
-const CAR_FERRIES = [
-  {
-    name: "Sea Bridge",
-    route: "Majors Bay → Cades Bay, Nevis",
-    routeBack: "Cades Bay, Nevis → Majors Bay",
-    duration: "~15–25 min",
-    phone: "869-662-7002",
-    price: "EC$25 per person · vehicles extra",
-    note: "Drive-on, drive-off. Arrive 30 min early. Runs every 2 hrs daily.",
-    skn_to_nevis: ["8:00 AM","10:00 AM","12:00 PM","2:00 PM","4:00 PM","7:00 PM"],
-    nevis_to_skn: ["7:00 AM","9:00 AM","11:00 AM","1:00 PM","3:00 PM","6:00 PM"],
-  },
-  {
-    name: "iConnect",
-    route: "Majors Bay → Long Point, Nevis",
-    routeBack: "Long Point, Nevis → Majors Bay",
-    duration: "~40 min",
-    phone: "869-466-3339",
-    price: "See iconnectskn.com",
-    note: "Mon–Sat: 3 trips. Sunday: 2 trips. Good for large groups and vehicles.",
-    skn_to_nevis: ["9:00 AM","12:30 PM","5:30 PM"],
-    nevis_to_skn: ["7:30 AM","11:00 AM","4:00 PM"],
-  },
-];
-
-const WATER_TAXIS = [
-  { name: "Islander Water Taxi", tel: "869-662-7081" },
-  { name: "Blu Waves Water Taxi", tel: "869-662-1762" },
-];
 
 function getTodayName(): string {
   return DAYS[new Date().getDay() === 0 ? 6 : new Date().getDay() - 1];
@@ -67,8 +28,10 @@ export default function FerryPage() {
   const [direction, setDirection] = useState<Direction>("skn_to_nevis");
   const [selectedDay, setSelectedDay] = useState(getTodayName());
 
-  const todaySchedule = PASSENGER_SCHEDULE[selectedDay];
-  const times = direction === "skn_to_nevis" ? todaySchedule.skn_to_nevis : todaySchedule.nevis_to_skn;
+  const c = usePageContent("ferry");
+  const pf = c.passenger_ferry;
+  const todaySchedule = (pf.schedule as any)[selectedDay] || { to_nevis: "", to_st_kitts: "" };
+  const times = parseTimes(direction === "skn_to_nevis" ? todaySchedule.to_nevis : todaySchedule.to_st_kitts);
   const nextIdx = times.findIndex(t => isNextDeparture(t));
 
   return (
@@ -82,14 +45,14 @@ export default function FerryPage() {
           </h1>
         </div>
         <p className="text-sm" style={{ color: "#1AAFCC" }}>
-          Ferries & Water Taxis · St Kitts ↔ Nevis
+          {c.subtitle}
         </p>
       </div>
 
       {/* Seasonal disclaimer */}
       <div className="px-4 py-2.5 bg-amber-50 dark:bg-amber-950/30 border-b border-amber-200 dark:border-amber-800 shrink-0">
         <p className="text-xs text-amber-800 dark:text-amber-400">
-          ⚠️ All schedules and services are subject to change, especially during off-season. Always confirm before heading out.
+          {c.disclaimer}
         </p>
       </div>
 
@@ -141,8 +104,8 @@ export default function FerryPage() {
 
             <div className="flex items-center gap-2 text-xs text-muted-foreground px-1">
               <Anchor className="w-3.5 h-3.5" />
-              {direction === "skn_to_nevis" ? "Basseterre (Port Zante) → Charlestown, Nevis" : "Charlestown, Nevis → Basseterre (Port Zante)"}
-              <span className="ml-auto">~25–45 min</span>
+              {direction === "skn_to_nevis" ? pf.route_to_nevis : pf.route_to_st_kitts}
+              <span className="ml-auto">{pf.crossing_time}</span>
             </div>
 
             <div className="flex gap-1 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
@@ -196,17 +159,13 @@ export default function FerryPage() {
             <div className="bg-card border border-card-border rounded-xl p-4 space-y-2.5">
               <h3 className="font-bold text-sm text-foreground">Fares & Tips</h3>
               <div className="space-y-1.5 text-xs text-muted-foreground">
-                <p>🎟 <strong className="text-foreground">EC$25–30</strong> per person (~US$9–11)</p>
-                <p>📍 Departs from <strong className="text-foreground">Port Zante</strong>, Basseterre</p>
-                <p>⏰ Arrive <strong className="text-foreground">15–20 min early</strong> — ferries fill up</p>
-                <p>💵 <strong className="text-foreground">Cash only</strong> at the dock</p>
-                <p>🌊 Schedules subject to weather — always confirm day-of</p>
+                {pf.fares_and_tips.map((line, i) => <p key={i}><Rich text={line} /></p>)}
               </div>
             </div>
 
             <div className="p-3.5 rounded-xl border border-card-border bg-card">
               <p className="text-xs text-muted-foreground leading-relaxed italic">
-                🧂 <strong>Salty says:</strong> The passenger ferry is the most affordable way to cross. Sit outside if conditions are calm — the channel views are worth it. Water taxis are faster and more flexible if you need to move on your own schedule.
+                🧂 <strong>Salty says:</strong> <Rich text={pf.salty_says} />
               </p>
             </div>
             <div className="h-2" />
@@ -217,10 +176,10 @@ export default function FerryPage() {
         {tab === "car" && (
           <div className="p-4 space-y-4">
             <p className="text-xs text-muted-foreground px-1">
-              For vehicles or if you're coming from the Southeast Peninsula — car ferries dock at <strong className="text-foreground">Majors Bay</strong>, not Basseterre.
+              <Rich text={c.car_ferry.intro} />
             </p>
 
-            {CAR_FERRIES.map(ferry => (
+            {c.car_ferry.ferries.map(ferry => (
               <div key={ferry.name} className="bg-card border border-card-border rounded-xl overflow-hidden">
                 <div className="px-4 py-3 border-b border-border" style={{ background: "#1C3B5A" }}>
                   <div className="flex items-center justify-between">
@@ -235,7 +194,7 @@ export default function FerryPage() {
 
                 <div className="p-4 space-y-3">
                   <div className="flex gap-4 text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{ferry.duration}</span>
+                    <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{ferry.crossing_time}</span>
                     <span>💰 {ferry.price}</span>
                   </div>
 
@@ -243,7 +202,7 @@ export default function FerryPage() {
                     <div>
                       <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-2">SKN → Nevis</p>
                       <div className="space-y-1">
-                        {ferry.skn_to_nevis.map(t => (
+                        {parseTimes(ferry.to_nevis).map(t => (
                           <div key={t} className="text-sm font-semibold text-foreground px-2 py-1 rounded-lg bg-muted/40">{t}</div>
                         ))}
                       </div>
@@ -251,7 +210,7 @@ export default function FerryPage() {
                     <div>
                       <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-2">Nevis → SKN</p>
                       <div className="space-y-1">
-                        {ferry.nevis_to_skn.map(t => (
+                        {parseTimes(ferry.to_st_kitts).map(t => (
                           <div key={t} className="text-sm font-semibold text-foreground px-2 py-1 rounded-lg bg-muted/40">{t}</div>
                         ))}
                       </div>
@@ -265,7 +224,7 @@ export default function FerryPage() {
 
             <div className="p-3.5 rounded-xl border border-card-border bg-card">
               <p className="text-xs text-muted-foreground leading-relaxed italic">
-                🧂 <strong>Salty says:</strong> If you have a rental car and want to drive around Nevis, Sea Bridge from Majors Bay is your move. It's a 15-minute crossing and you roll straight off onto the Nevis road. Bring cash.
+                🧂 <strong>Salty says:</strong> <Rich text={c.car_ferry.salty_says} />
               </p>
             </div>
             <div className="h-2" />
@@ -278,40 +237,36 @@ export default function FerryPage() {
             <div className="bg-card border border-card-border rounded-xl p-4 space-y-2.5">
               <h3 className="font-bold text-sm text-foreground flex items-center gap-2">
                 <Waves className="w-4 h-4" style={{ color: "#1AAFCC" }} />
-                Water Taxis — Reggae Beach
+                {c.water_taxi.title}
               </h3>
               <div className="space-y-1.5 text-xs text-muted-foreground">
-                <p>🕐 Depart approximately <strong className="text-foreground">every 15 minutes</strong> from Reggae Beach</p>
-                <p>⚡ <strong className="text-foreground">Faster and more flexible</strong> than the passenger ferry</p>
-                <p>📍 Default departure: <strong className="text-foreground">Reggae Beach, Southeast Peninsula</strong></p>
-                <p>🌙 Available for <strong className="text-foreground">late returns</strong> — arrange in advance</p>
-                <p>📞 Can be hired from <strong className="text-foreground">other locations</strong> — just call ahead</p>
+                {c.water_taxi.info.map((line, i) => <p key={i}><Rich text={line} /></p>)}
               </div>
             </div>
 
             <div className="space-y-3">
               <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-1">Operators</h3>
-              {WATER_TAXIS.map(op => (
+              {c.water_taxi.operators.map(op => (
                 <a
-                  key={op.tel}
-                  href={`tel:${op.tel}`}
+                  key={op.phone}
+                  href={`tel:${op.phone}`}
                   className="flex items-center justify-between w-full px-4 py-3.5 rounded-xl border bg-card text-sm font-semibold transition-colors hover:bg-muted/40"
                   style={{ borderColor: "#1AAFCC44", color: "#1AAFCC" }}
                 >
                   <span className="text-foreground">{op.name}</span>
-                  <span className="text-xs font-normal" style={{ color: "#1AAFCC" }}>{op.tel}</span>
+                  <span className="text-xs font-normal" style={{ color: "#1AAFCC" }}>{op.phone}</span>
                 </a>
               ))}
             </div>
 
             <div className="p-3.5 rounded-xl border border-card-border bg-card">
               <p className="text-xs text-muted-foreground leading-relaxed italic">
-                🧂 <strong>Salty says:</strong> Water taxis are the move if you're already on the Southeast Peninsula or want a faster, more direct crossing. They run roughly every 15 minutes from Reggae Beach and can be arranged for late nights — just coordinate directly with the operator before you go.
+                🧂 <strong>Salty says:</strong> <Rich text={c.water_taxi.salty_says} />
               </p>
             </div>
 
             <div className="px-3 py-2.5 rounded-lg text-xs" style={{ background: "#1AAFCC11", borderLeft: "3px solid #1AAFCC" }}>
-              <p className="text-muted-foreground">⚠️ All schedules and availability are subject to change, especially during off-season. Confirm directly with operators before heading out.</p>
+              <p className="text-muted-foreground">{c.water_taxi.disclaimer}</p>
             </div>
             <div className="h-2" />
           </div>

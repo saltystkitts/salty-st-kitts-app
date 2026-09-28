@@ -1,3 +1,4 @@
+import { PageEditor } from "../components/PageEditor";
 import { imgSrc } from "../lib/nativeApi";
 import { useState, useEffect } from "react";
 import { Lock, LogOut, MapPin, Waves, Eye, EyeOff, Pencil, Trash2, Plus, Check, X } from "lucide-react";
@@ -501,7 +502,7 @@ function NewPostForm({ onSaved, onCancel }: { onSaved: () => void; onCancel: () 
 // ─── Main Admin Panel ────────────────────────────────────
 export default function AdminPage() {
   const [authed, setAuthed] = useState(false);
-  const [section, setSection] = useState<"stops" | "salt" | "codes">("stops");
+  const [section, setSection] = useState<"stops" | "salt" | "pages" | "codes">("stops");
   const [settings, setSettings] = useState<Record<string,string>>({});
   const [settingsSaved, setSettingsSaved] = useState(false);
 
@@ -569,6 +570,13 @@ export default function AdminPage() {
           style={{ borderColor: section === "salt" ? "#1AAFCC" : "transparent" }}
         >
           <Waves className="w-4 h-4" /> The Salt ({posts.length})
+        </button>
+        <button
+          onClick={() => setSection("pages")}
+          className={`flex-1 py-3 text-sm font-bold flex items-center justify-center gap-1.5 transition-colors ${section === "pages" ? "border-b-2 text-foreground" : "text-muted-foreground"}`}
+          style={{ borderColor: section === "pages" ? "#1AAFCC" : "transparent" }}
+        >
+          📄 Pages
         </button>
         <button
           onClick={() => setSection("codes")}
@@ -643,6 +651,9 @@ export default function AdminPage() {
             <div className="h-4" />
           </div>
         )}
+
+        {/* ── PAGES SECTION (By Water, Taxis, Holidays, Weather) ── */}
+        {section === "pages" && <PageEditor />}
 
         {/* ── CODES SECTION ── */}
         {section === "codes" && (

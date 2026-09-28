@@ -1,51 +1,10 @@
-export default function HolidaysPage() {
-  const publicHolidays = [
-    { date: "Jan 1",    name: "New Year's Day" },
-    { date: "Jan 2",    name: "Carnival Day (Last Lap)", note: "Final day of Carnival season" },
-    { date: "Mar/Apr",  name: "Good Friday",             note: "Date varies" },
-    { date: "Mar/Apr",  name: "Easter Monday",           note: "Date varies" },
-    { date: "May",      name: "Labour Day",              note: "First Monday in May" },
-    { date: "May/Jun",  name: "Whit Monday",             note: "Date varies" },
-    { date: "Aug",      name: "Emancipation Day",        note: "First Monday in August" },
-    { date: "Aug",      name: "Culturama Day",           note: "Nevis — first Tuesday after Emancipation Monday" },
-    { date: "Sep 16",   name: "National Heroes Day" },
-    { date: "Sep 19",   name: "Independence Day",        note: "Big celebrations island-wide" },
-    { date: "Dec 25",   name: "Christmas Day" },
-    { date: "Dec 26",   name: "Boxing Day / J'ouvert" },
-  ];
+import { usePageContent, Rich } from "@/lib/pageContent";
 
-  const bigEvents = [
-    {
-      emoji: "🎭",
-      name: "Carnival",
-      period: "Late December – Early January",
-      color: "#E8614A",
-      description: "St Kitts Carnival — locally called Sugar Mas — is the most culturally significant celebration on the island. It runs from mid-December through January 2nd. The streets come alive with J'ouvert (jouvert), calypso, soca music, elaborate masquerade bands, and steel pan. The energy is electric and nothing else on the island compares.",
-      highlights: [
-        "J'ouvert — early morning street party, paint and powder everywhere",
-        "Masquerade bands parade through Basseterre",
-        "Calypso and soca competitions",
-        "Street food, rum, and dancing until the sun comes up",
-        "Last Lap on January 2nd closes it all out",
-      ],
-      tip: "J'ouvert is the street party on Boxing Day (December 26th), starting at 4am. No special costume needed — just show up. To join a costumed troupe and 'play mas,' check Instagram for the different troops — options vary each year and it's not cheap. For all Carnival events, take a taxi or 'Uber' in — parking is a disaster and you'll want both hands free.",
-    },
-    {
-      emoji: "🎵",
-      name: "St Kitts Music Festival",
-      period: "Late June (usually last weekend)",
-      color: "#1AAFCC",
-      description: "The St Kitts Music Festival is one of the premier music events in the Eastern Caribbean, drawing international and regional artists across R&B, reggae, soca, jazz, and gospel over three nights at the Warner Park stadium. It has hosted everyone from Lionel Richie to Beres Hammond. The crowd is a genuine mix of locals and visitors — this is not a tourist trap, it is a real event.",
-      highlights: [
-        "Three nights of live performances",
-        "International headliners alongside Caribbean artists",
-        "R&B, reggae, soca, jazz, and gospel stages",
-        "Warner Park Stadium, Basseterre",
-        "Street food vendors and bars around the venue",
-      ],
-      tip: "Book accommodation early — the island fills up fast during Music Fest weekend and prices spike. Friday night tends to have the best lineup.",
-    },
-  ];
+export default function HolidaysPage() {
+  const c = usePageContent("holidays");
+  const COLORS = ["#E8614A", "#1AAFCC", "#1C3B5A"];
+  const publicHolidays = c.public_holidays;
+  const bigEvents = c.big_events.map((e, i) => ({ ...e, color: COLORS[i % COLORS.length] }));
 
   return (
     <div className="h-full overflow-y-auto bg-background">
@@ -53,15 +12,15 @@ export default function HolidaysPage() {
 
         {/* Header */}
         <div>
-          <h1 className="text-xl font-bold" style={{ color: "#1AAFCC" }}>Holidays & Events</h1>
-          <p className="text-sm text-muted-foreground mt-1">The St Kitts calendar — what's happening and when.</p>
+          <h1 className="text-xl font-bold" style={{ color: "#1AAFCC" }}>{c.title}</h1>
+          <p className="text-sm text-muted-foreground mt-1">{c.subtitle}</p>
         </div>
 
         {/* Holiday closure warning */}
         <div className="rounded-2xl border border-amber-300 dark:border-amber-700 p-4" style={{ background: "#FFF8E7" }}>
-          <p className="font-bold text-sm text-amber-800 dark:text-amber-400 mb-1">⚠️ We Take Our Holidays Seriously</p>
+          <p className="font-bold text-sm text-amber-800 dark:text-amber-400 mb-1">{c.warning_title}</p>
           <p className="text-sm text-amber-900 dark:text-amber-300 leading-relaxed">
-            On public holidays, <strong>most businesses will be closed</strong> — including gas stations, grocery stores, pharmacies, and banks. Plan ahead. Stock up the day before. Don't assume anything will be open, because chances are it won't be. This is not a complaint — it's island life at its finest.
+            <Rich text={c.warning_text} />
           </p>
         </div>
 
@@ -72,11 +31,11 @@ export default function HolidaysPage() {
               <span className="text-2xl">{event.emoji}</span>
               <div>
                 <h2 className="font-bold text-base" style={{ color: event.color }}>{event.name}</h2>
-                <p className="text-xs text-muted-foreground">{event.period}</p>
+                <p className="text-xs text-muted-foreground">{event.when}</p>
               </div>
             </div>
             <div className="px-4 py-3 space-y-3">
-              <p className="text-sm text-foreground leading-relaxed">{event.description}</p>
+              <p className="text-sm text-foreground leading-relaxed"><Rich text={event.description} /></p>
               <div className="space-y-1">
                 {event.highlights.map((h, i) => (
                   <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
@@ -87,7 +46,7 @@ export default function HolidaysPage() {
               </div>
               <div className="rounded-xl px-3 py-2 text-xs text-foreground leading-relaxed" style={{ background: event.color + "15" }}>
                 <span className="font-semibold" style={{ color: event.color }}>The Salt: </span>
-                {event.tip}
+                <Rich text={event.the_salt} />
               </div>
             </div>
           </div>
@@ -109,7 +68,7 @@ export default function HolidaysPage() {
           </div>
         </div>
 
-        <p className="text-xs text-muted-foreground text-center pb-2">Dates may shift year to year. Always verify locally.</p>
+        <p className="text-xs text-muted-foreground text-center pb-2">{c.footer}</p>
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+import { usePageContent, Rich } from "@/lib/pageContent";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Wind, Droplets, Eye, Thermometer, RefreshCw } from "lucide-react";
@@ -53,6 +54,7 @@ function dayLabel(dateStr: string, index: number): string {
 function toF(c: number): number { return Math.round(c * 9 / 5 + 32); }
 
 export default function WeatherPage() {
+  const content = usePageContent("weather");
   const [useFahrenheit, setUseFahrenheit] = useState(true);
 
   const { data, isLoading, error, refetch, dataUpdatedAt } = useQuery<WeatherData>({
@@ -188,7 +190,7 @@ export default function WeatherPage() {
           {/* Salty weather note */}
           <div className="mt-4 p-3.5 rounded-xl border border-card-border bg-card">
             <p className="text-xs text-muted-foreground leading-relaxed italic">
-              🧂 <strong>The Salty take on St Kitts weather:</strong> It's the Caribbean — warm, sunny, and occasionally dramatic. Expect temperatures in the mid-80s°F year-round, with brief afternoon showers that usually clear within 20 minutes. Hurricane season runs June through November, but direct hits are rare. Pack sunscreen and a light layer for the AC. You won't need an umbrella, but you'll definitely need the sunscreen.
+              🧂 <strong>The Salty take on St Kitts weather:</strong> <Rich text={content.salty_take} />
             </p>
           </div>
           <div className="h-4" />
