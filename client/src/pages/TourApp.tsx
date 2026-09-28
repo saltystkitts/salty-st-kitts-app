@@ -1,3 +1,4 @@
+import { byDistanceFromFrigate } from "@/lib/distance";
 import { useState, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -49,12 +50,14 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
   const [mapVisible, setMapVisible] = useState(true);
   const listRef = useRef<HTMLDivElement>(null);
 
-  const { data: stops = [], isLoading } = useQuery<Stop[]>({
+  const { data: rawStops = [], isLoading } = useQuery<Stop[]>({
     queryKey: ["/api/stops", category],
     queryFn: () =>
       apiRequest("GET", `/api/stops${category !== "all" ? `?category=${category}` : ""}`)
         .then(r => r.json()),
   });
+  // Lists run outward from Frigate Bay
+  const stops = [...rawStops].sort(byDistanceFromFrigate);
 
   const handleStopSelect = (stop: Stop) => {
     if (paywalled && stop.category !== "scenic_drive") { onUpgrade?.(); return; }

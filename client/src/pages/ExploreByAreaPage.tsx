@@ -1,3 +1,4 @@
+import { byDistanceFromFrigate } from "@/lib/distance";
 import { useState, useEffect } from "react";
 import { ChevronRight, ChevronDown, MapPin, X } from "lucide-react";
 
@@ -349,16 +350,14 @@ export default function ExploreByAreaPage() {
   function stopsForZone(zone: typeof ZONES[0]): Stop[] {
     return stops.filter((s) =>
       zone.areaMatches.some((a) => s.area === a || s.area.includes(a) || a.includes(s.area))
-    ).sort((a, b) => a.name.localeCompare(b.name));
+    ).sort(byDistanceFromFrigate);
   }
 
   function stopsForVibe(vibe: typeof VIBES[0]): Stop[] {
     return stops
       .filter((s) => vibe.categories.includes(s.category))
       .sort((a, b) => {
-        if (a.featured && !b.featured) return -1;
-        if (!a.featured && b.featured) return 1;
-        return a.name.localeCompare(b.name);
+        return byDistanceFromFrigate(a, b);
       });
   }
 
