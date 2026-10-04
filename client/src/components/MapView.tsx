@@ -3,6 +3,21 @@ import type { Stop } from "@shared/schema";
 import { CATEGORY_CONFIG } from "../lib/categories";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { leafletLayer } from "protomaps-leaflet";
+import { PMTiles, FileSource } from "pmtiles";
+
+// Street-style map of St Kitts & Nevis packed into the app (OpenStreetMap data via Protomaps).
+async function buildOfflineLayer(): Promise<L.Layer> {
+  const res = await fetch("/offline/skn.pmtiles");
+  const blob = await res.blob();
+  const archive = new PMTiles(new FileSource(new File([blob], "skn.pmtiles")));
+  return leafletLayer({
+    url: archive,
+    flavor: "light",
+    lang: "en",
+    attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>',
+  } as any) as unknown as L.Layer;
+}
 
 // Fix Leaflet default icon path issue with bundlers
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -39,13 +54,49 @@ export function MapView({ stops, selectedStop, center, zoom, onPinClick }: Props
 
     L.control.zoom({ position: "bottomright" }).addTo(map);
 
-    L.tileLayer("https://mt{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}", {
+    // Satellite when there's signal; offline island map (packed into the app) when there isn't.
+    const satellite = L.tileLayer("https://mt{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}", {
       attribution: '&copy; <a href="https://maps.google.com" target="_blank">Google Maps</a>',
       subdomains: "0123",
       maxZoom: 20,
-    }).addTo(map);
+    });
+    let offline: L.Layer | null = null;
+    let mode: "satellite" | "offline" | null = null;
+
+    const goSatellite = () => {
+      if (mode === "satellite") return;
+      mode = "satellite";
+      if (offline) map.removeLayer(offline);
+      satellite.addTo(map);
+    };
+    const goOffline = async () => {
+      if (mode === "offline") return;
+      mode = "offline";
+      map.removeLayer(satellite);
+      try {
+        if (!offline) offline = await buildOfflineLayer();
+        if (mode === "offline") offline.addTo(map);
+      } catch (e) {
+        console.warn("Offline map unavailable", e);
+      }
+    };
+
+    let failures = 0;
+    satellite.on("tileload", () => { failures = 0; });
+    satellite.on("tileerror", () => { if (++failures >= 4) goOffline(); });
+    const onOnline = () => { failures = 0; goSatellite(); };
+    const onOffline = () => { goOffline(); };
+    window.addEventListener("online", onOnline);
+    window.addEventListener("offline", onOffline);
+
+    if (navigator.onLine) goSatellite(); else goOffline();
 
     mapInstanceRef.current = map;
+
+    return () => {
+      window.removeEventListener("online", onOnline);
+      window.removeEventListener("offline", onOffline);
+    };
   }, []);
 
   // Re-render markers whenever stops or selectedStop changes

@@ -48,6 +48,8 @@ export const queryClient = new QueryClient({
       refetchOnWindowFocus: false,
       staleTime: Infinity,
       retry: false,
+      // Run queries even with no signal so the offline copy kicks in
+      networkMode: "always",
     },
     mutations: {
       retry: false,
