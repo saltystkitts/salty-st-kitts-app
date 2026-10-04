@@ -92,6 +92,12 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
         <p className="text-xs text-muted-foreground font-medium italic">{SUBTEXT[category]}</p>
       </div>
 
+      {(category === "food_nightlife" || category === "loot") && (
+        <div className="px-4 py-2 border-b border-border shrink-0" style={{ background: "#E8614A14" }}>
+          <p className="text-xs leading-snug text-foreground/80">🧂 Nobody pays to be here. Everything's based on years of experience and preference, and subject to change.</p>
+        </div>
+      )}
+
       {category === "beach" && (
         <div className="px-4 py-2 border-b border-border shrink-0" style={{ background: "#1AAFCC14" }}>
           <p className="text-xs leading-snug text-foreground/80">

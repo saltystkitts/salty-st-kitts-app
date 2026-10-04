@@ -14,6 +14,10 @@ export default function ActionTingsPage() {
         <p className="text-sm mt-0.5" style={{ color: "#1AAFCC" }}>{c.subtitle}</p>
       </div>
 
+      <div className="px-4 py-2 border-b border-border shrink-0" style={{ background: "#E8614A14" }}>
+        <p className="text-xs leading-snug text-foreground/80">🧂 Nobody pays to be here. Everything's based on years of experience and preference, and subject to change.</p>
+      </div>
+
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
         {c.activities.filter(a => a.name).map((a, i) => (
           <div key={i} className="rounded-2xl border border-border bg-card p-4 space-y-2">
