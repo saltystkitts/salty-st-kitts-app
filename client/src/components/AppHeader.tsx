@@ -1,7 +1,7 @@
 import { Sun, Moon } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 import { Button } from "@/components/ui/button";
-import saltyLogo from "@assets/salty-logo.jpg";
+import saltyLogo from "@assets/salty-icon-new.png";
 
 export function AppHeader() {
   const { theme, toggleTheme } = useTheme();
@@ -12,7 +12,7 @@ export function AppHeader() {
         <img
           src={saltyLogo}
           alt="Salty St Kitts"
-          className="h-10 w-auto object-contain"
+          className="h-10 w-10 rounded-xl object-cover"
         />
         <div>
           <div

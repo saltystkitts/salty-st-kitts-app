@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useUnlock } from "../context/UnlockContext";
 import { X } from "lucide-react";
-import saltyLogo from "@assets/salty-logo.jpg";
+import saltyLogo from "@assets/salty-icon-new.png";
 
 export default function UnlockScreen({ onDismiss }: { onDismiss?: () => void }) {
   const { unlock, stripeLink } = useUnlock();
