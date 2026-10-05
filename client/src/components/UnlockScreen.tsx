@@ -59,7 +59,6 @@ export default function UnlockScreen({ onDismiss }: { onDismiss?: () => void }) 
                   <div>✅ Full stop details</div>
                   <div>✅ Ferry, Taxi, Weather</div>
                   <div>✅ Explore By Area</div>
-                  <div>✅ Audio tours soon</div>
                 </div>
               </div>
             </div>
