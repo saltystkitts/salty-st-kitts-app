@@ -1,3 +1,4 @@
+import { Capacitor } from "@capacitor/core";
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 interface UnlockContextType {
@@ -13,8 +14,11 @@ const UnlockContext = createContext<UnlockContextType>({
 });
 
 export function UnlockProvider({ children }: { children: ReactNode }) {
+  // iPhone/Android app: everything unlocked for now (testing). No Stripe or codes
+  // in the native app — Apple/Google require their own in-app purchase instead.
+  const native = Capacitor.isNativePlatform();
   const [unlocked, setUnlocked] = useState(() => {
-    return localStorage.getItem("salty_unlocked") === "true";
+    return native || localStorage.getItem("salty_unlocked") === "true";
   });
   const [stripeLink, setStripeLink] = useState("https://buy.stripe.com/8x200c8P86CgdsQg5XgEg0S");
 
