@@ -76,4 +76,10 @@ export async function initDb() {
       ('stripe_link', 'https://buy.stripe.com/8x200c8P86CgdsQg5XgEg0S')
     ON CONFLICT (key) DO NOTHING;
   `);
+
+  // Manual ordering (Loot list, The Salt)
+  await pool.query(`
+    ALTER TABLE stops ADD COLUMN IF NOT EXISTS sort_order INTEGER;
+    ALTER TABLE salt_posts ADD COLUMN IF NOT EXISTS sort_order INTEGER;
+  `);
 }

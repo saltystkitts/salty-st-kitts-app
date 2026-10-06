@@ -1,7 +1,8 @@
 import { PageEditor } from "../components/PageEditor";
 import { imgSrc } from "../lib/nativeApi";
 import { useState, useEffect } from "react";
-import { Lock, LogOut, MapPin, Waves, Eye, EyeOff, Pencil, Trash2, Plus, Check, X } from "lucide-react";
+import { Lock, LogOut, MapPin, Waves, Eye, EyeOff, Pencil, Trash2, Plus, Check, X, ChevronUp, ChevronDown } from "lucide-react";
+import { byManualOrder, stopListSort } from "../lib/order";
 
 const ADMIN_PASSWORD = "salty2026";
 
@@ -540,7 +541,24 @@ export default function AdminPage() {
 
   if (!authed) return <LoginScreen onLogin={() => setAuthed(true)} />;
 
-  const filteredStops = filterCat === "all" ? stops : stops.filter(s => s.category === filterCat);
+  const filteredStops = (filterCat === "all" ? stops : stops.filter(s => s.category === filterCat)).slice().sort(stopListSort(filterCat));
+  const sortedPosts = posts.slice().sort(byManualOrder);
+
+  async function saveOrder(table: "stops" | "salt_posts", list: any[], i: number, dir: number) {
+    const j = i + dir;
+    if (j < 0 || j >= list.length) return;
+    const ids = list.map(x => x.id);
+    [ids[i], ids[j]] = [ids[j], ids[i]];
+    await fetch("/api/admin/reorder", { method: "POST", headers: { ...authHeaders(), "Content-Type": "application/json" }, body: JSON.stringify({ table, ids }) });
+    table === "stops" ? loadStops() : loadPosts();
+  }
+
+  const arrows = (onUp: () => void, onDown: () => void, first: boolean, last: boolean) => (
+    <div className="flex flex-col gap-1 pt-3 shrink-0">
+      <button type="button" title="Move up" disabled={first} onClick={onUp} className="p-1.5 rounded-md border border-border text-muted-foreground disabled:opacity-30"><ChevronUp className="w-4 h-4" /></button>
+      <button type="button" title="Move down" disabled={last} onClick={onDown} className="p-1.5 rounded-md border border-border text-muted-foreground disabled:opacity-30"><ChevronDown className="w-4 h-4" /></button>
+    </div>
+  );
 
   return (
     <div className="flex flex-col h-full overflow-hidden bg-background">
@@ -623,7 +641,15 @@ export default function AdminPage() {
               <NewStopForm onSaved={() => { setAddingStop(false); loadStops(); }} onCancel={() => setAddingStop(false)} />
             )}
 
-            {filteredStops.map(stop => (
+            {filterCat === "loot" && (
+              <p className="text-xs text-muted-foreground">Use ▲▼ to set the order Loot shows in the list. The map isn't affected.</p>
+            )}
+            {filteredStops.map((stop, i) => filterCat === "loot" ? (
+              <div key={stop.id} className="flex gap-2 items-start">
+                {arrows(() => saveOrder("stops", filteredStops, i, -1), () => saveOrder("stops", filteredStops, i, 1), i === 0, i === filteredStops.length - 1)}
+                <div className="flex-1 min-w-0"><StopRow stop={stop} onUpdate={loadStops} onDelete={loadStops} /></div>
+              </div>
+            ) : (
               <StopRow key={stop.id} stop={stop} onUpdate={loadStops} onDelete={loadStops} />
             ))}
             <div className="h-4" />
@@ -645,8 +671,12 @@ export default function AdminPage() {
             {addingPost && (
               <NewPostForm onSaved={() => { setAddingPost(false); loadPosts(); }} onCancel={() => setAddingPost(false)} />
             )}
-            {posts.map(post => (
-              <PostRow key={post.id} post={post} onUpdate={loadPosts} onDelete={loadPosts} />
+            <p className="text-xs text-muted-foreground">Use ▲▼ to set the order posts show in The Salt.</p>
+            {sortedPosts.map((post, i) => (
+              <div key={post.id} className="flex gap-2 items-start">
+                {arrows(() => saveOrder("salt_posts", sortedPosts, i, -1), () => saveOrder("salt_posts", sortedPosts, i, 1), i === 0, i === sortedPosts.length - 1)}
+                <div className="flex-1 min-w-0"><PostRow post={post} onUpdate={loadPosts} onDelete={loadPosts} /></div>
+              </div>
             ))}
             <div className="h-4" />
           </div>

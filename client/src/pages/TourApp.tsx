@@ -1,3 +1,4 @@
+import { stopListSort } from "@/lib/order";
 import ActionTingsPage from "./ActionTingsPage";
 import { byDistanceFromFrigate } from "@/lib/distance";
 import { useState, useRef } from "react";
@@ -58,7 +59,7 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
         .then(r => r.json()),
   });
   // Lists run outward from Frigate Bay
-  const stops = [...rawStops].sort(byDistanceFromFrigate);
+  const stops = [...rawStops].sort(stopListSort(category));
 
   const handleStopSelect = (stop: Stop) => {
     if (paywalled && stop.category !== "scenic_drive") { onUpgrade?.(); return; }

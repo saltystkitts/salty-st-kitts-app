@@ -24,6 +24,7 @@ export const stops = pgTable("stops", {
   bestTime: text("best_time"),
   vibe: text("vibe"),
   closedNote: text("closed_note"),
+  sortOrder: integer("sort_order"),
 });
 
 export const insertStopSchema = createInsertSchema(stops).omit({ id: true });
@@ -39,6 +40,7 @@ export const saltPosts = pgTable("salt_posts", {
   emoji: text("emoji").notNull().default("🌊"),
   tag: text("tag").notNull().default("Local Tips"),
   visible: boolean("visible").notNull().default(true),
+  sortOrder: integer("sort_order"),
 });
 
 export const insertSaltPostSchema = createInsertSchema(saltPosts).omit({ id: true });

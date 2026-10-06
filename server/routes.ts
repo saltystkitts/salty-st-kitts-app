@@ -261,6 +261,18 @@ export async function registerRoutes(httpServer: Server, app: Express): Promise<
     return res.json(post);
   });
 
+  // Save a custom order: { table: "stops" | "salt_posts", ids: [3, 7, 1, ...] }
+  app.post("/api/admin/reorder", async (req, res) => {
+    if (!checkAdmin(req)) return res.status(401).json({ message: "Unauthorized" });
+    const { table, ids } = req.body || {};
+    if (!["stops", "salt_posts"].includes(table) || !Array.isArray(ids)) return res.status(400).json({ message: "Bad request" });
+    const clean = ids.map((n: any) => parseInt(n)).filter((n: number) => Number.isFinite(n));
+    for (let i = 0; i < clean.length; i++) {
+      await pool.query(`UPDATE ${table} SET sort_order = $1 WHERE id = $2`, [i + 1, clean[i]]);
+    }
+    return res.json({ ok: true });
+  });
+
   app.delete("/api/admin/salt-posts/:id", async (req, res) => {
     if (!checkAdmin(req)) return res.status(401).json({ message: "Unauthorized" });
     await storage.deleteSaltPost(parseInt(req.params.id));

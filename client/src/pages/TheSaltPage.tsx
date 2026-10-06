@@ -1,3 +1,4 @@
+import { byManualOrder } from "@/lib/order";
 import { Waves } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
@@ -45,7 +46,7 @@ export default function TheSaltPage() {
           {!isLoading && posts.length === 0 && (
             <p className="text-sm text-muted-foreground text-center py-8">No posts yet. Check back soon.</p>
           )}
-          {posts.map(post => (
+          {[...posts].sort(byManualOrder).map(post => (
             <article
               key={post.id}
               data-testid={`salt-post-${post.id}`}
