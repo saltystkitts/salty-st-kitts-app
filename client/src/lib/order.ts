@@ -13,6 +13,13 @@ export function stopListSort(category: string) {
       const x = a.sortOrder ?? Number.MAX_SAFE_INTEGER, y = b.sortOrder ?? Number.MAX_SAFE_INTEGER;
       if (x !== y) return x - y;
     }
+    // Delivery-only businesses have no real spot, so they go to the bottom
+    const da = isDelivery(a) ? 1 : 0, db = isDelivery(b) ? 1 : 0;
+    if (da !== db) return da - db;
     return byDistanceFromFrigate(a, b);
   };
+}
+
+function isDelivery(s: any) {
+  return typeof s.area === "string" && s.area.trim().toLowerCase().startsWith("delivery");
 }
