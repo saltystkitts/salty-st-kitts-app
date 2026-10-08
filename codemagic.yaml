@@ -14,7 +14,7 @@ workflows:
         XCODE_SCHEME: "App"
         BUNDLE_ID: "com.saltystkitts.guide"
       node: 20.11.1
-      xcode: latest
+      xcode: 26.6
       cocoapods: default
     scripts:
       - name: Install npm dependencies
