@@ -120,7 +120,7 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
 
         {/* ── MAP — full width, closable ── */}
         {mapVisible && (
-          <div className="relative w-full" style={{ height: "55%" }}>
+          <div className="relative w-full isolate z-0" style={{ height: "55%" }}>
             {/* X to close */}
             <button
               onClick={() => setMapVisible(false)}
