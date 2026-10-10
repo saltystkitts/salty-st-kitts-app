@@ -62,14 +62,12 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
   const stops = [...rawStops].sort(stopListSort(category));
 
   const handleStopSelect = (stop: Stop) => {
-    if (paywalled && stop.category !== "scenic_drive") { onUpgrade?.(); return; }
     setSelectedStop(stop);
     setMapCenter([stop.lat, stop.lng]);
     setMapZoom(14);
   };
 
   const handleMapPinClick = (stop: Stop) => {
-    if (paywalled && stop.category !== "scenic_drive") { onUpgrade?.(); return; }
     setSelectedStop(stop);
     setMapCenter([stop.lat, stop.lng]);
     setMapZoom(14);
@@ -126,10 +124,11 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
             {/* X to close */}
             <button
               onClick={() => setMapVisible(false)}
-              className="absolute top-2 right-2 z-[1000] flex items-center justify-center w-8 h-8 rounded-full shadow-lg"
-              style={{ background: "#1C3B5A", color: "white" }}
+              className="absolute top-3 right-3 z-[1000] flex items-center justify-center w-12 h-12 rounded-full shadow-xl border-2 border-white active:scale-95 transition-transform"
+              style={{ background: "#E8614A", color: "white" }}
+              aria-label="Close map"
             >
-              <X className="w-4 h-4" />
+              <X className="w-7 h-7" strokeWidth={3} />
             </button>
             <div className="absolute inset-0">
               <MapView
@@ -194,13 +193,13 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
             )}
           </div>
 
-          <DesktopStopDetail stop={selectedStop} onClose={() => setSelectedStop(null)} />
+          <DesktopStopDetail stop={selectedStop} onClose={() => setSelectedStop(null)} paywalled={paywalled} onUpgrade={onUpgrade} />
         </div>
       </div>
       )}
 
       {/* Mobile bottom sheet */}
-      <StopSheet stop={selectedStop} onClose={() => setSelectedStop(null)} />
+      <StopSheet stop={selectedStop} onClose={() => setSelectedStop(null)} paywalled={paywalled} onUpgrade={onUpgrade} />
 
     </div>
   );

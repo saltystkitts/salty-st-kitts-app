@@ -1,12 +1,14 @@
 import { imgSrc } from "../lib/nativeApi";
 import type { Stop } from "@shared/schema";
-import { X, Clock, MapPin, Lightbulb, Navigation, ParkingCircle, Cigarette, Baby, Wifi, CreditCard, Shirt, Sun, Music } from "lucide-react";
+import { X, Clock, MapPin, Lightbulb, Navigation, ParkingCircle, Cigarette, Baby, Wifi, CreditCard, Shirt, Sun, Music, Lock } from "lucide-react";
 import { CATEGORY_CONFIG } from "../lib/categories";
 import { Button } from "@/components/ui/button";
 
 interface Props {
   stop: Stop | null;
   onClose: () => void;
+  paywalled?: boolean;
+  onUpgrade?: () => void;
 }
 
 // ── Attribute badge config ──────────────────────────────
@@ -91,11 +93,12 @@ function AttributeBadges({ stop }: { stop: Stop }) {
   );
 }
 
-export function StopSheet({ stop, onClose }: Props) {
+export function StopSheet({ stop, onClose, paywalled = false, onUpgrade }: Props) {
   if (!stop) return null;
   const config = CATEGORY_CONFIG[stop.category as keyof typeof CATEGORY_CONFIG] ?? CATEGORY_CONFIG.historical;
 
   const handleDirections = () => {
+    if (paywalled) { onUpgrade?.(); return; }
     const url = `https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lng}`;
     window.open(url, "_blank", "noopener noreferrer");
   };
@@ -104,10 +107,11 @@ export function StopSheet({ stop, onClose }: Props) {
     <>
       <div className="fixed inset-0 bg-black/40 z-40 md:hidden" onClick={onClose} />
       <div
-        className="fixed bottom-0 left-0 right-0 z-50 md:static md:z-auto bg-card border-t border-border rounded-t-2xl md:rounded-none shadow-xl md:shadow-none max-h-[80vh] overflow-y-auto md:hidden transition-all duration-300"
+        className="fixed bottom-0 left-0 right-0 z-50 md:static md:z-auto bg-card border-[3px] border-b-0 border-[#1C3B5A] rounded-t-2xl md:rounded-none shadow-2xl md:shadow-none max-h-[80vh] overflow-y-auto md:hidden transition-all duration-300"
         data-testid="stop-sheet"
       >
-        <div className="flex justify-center pt-3 pb-1">
+        <div className="h-1.5 w-full" style={{ background: "#1AAFCC" }} />
+        <div className="flex justify-center pt-2 pb-1">
           <div className="w-10 h-1 rounded-full bg-border" />
         </div>
 
@@ -125,8 +129,8 @@ export function StopSheet({ stop, onClose }: Props) {
             </div>
             <h2 className="text-lg font-bold text-foreground leading-tight">{stop.name}</h2>
           </div>
-          <button onClick={onClose} className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors ml-2" data-testid="close-sheet">
-            <X className="w-5 h-5" />
+          <button onClick={onClose} className="ml-2 shrink-0 flex items-center justify-center w-11 h-11 rounded-full shadow-md active:scale-95 transition-transform" style={{ background: "#E8614A", color: "white" }} aria-label="Close" data-testid="close-sheet">
+            <X className="w-6 h-6" strokeWidth={3} />
           </button>
         </div>
 
@@ -164,8 +168,8 @@ export function StopSheet({ stop, onClose }: Props) {
           </div>
 
           <Button onClick={handleDirections} className="w-full gap-2 font-semibold" data-testid="get-directions">
-            <Navigation className="w-4 h-4" />
-            Get Directions
+            {paywalled ? <Lock className="w-4 h-4" /> : <Navigation className="w-4 h-4" />}
+            {paywalled ? "Get Directions · Unlock $8.69" : "Get Directions"}
           </Button>
         </div>
         <div className="h-4" />
@@ -174,17 +178,19 @@ export function StopSheet({ stop, onClose }: Props) {
   );
 }
 
-export function DesktopStopDetail({ stop, onClose }: Props) {
+export function DesktopStopDetail({ stop, onClose, paywalled = false, onUpgrade }: Props) {
   if (!stop) return null;
   const config = CATEGORY_CONFIG[stop.category as keyof typeof CATEGORY_CONFIG] ?? CATEGORY_CONFIG.historical;
 
   const handleDirections = () => {
+    if (paywalled) { onUpgrade?.(); return; }
     const url = `https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lng}`;
     window.open(url, "_blank", "noopener noreferrer");
   };
 
   return (
-    <div className="border-t border-border bg-card/60 hidden md:block">
+    <div className="m-2 rounded-xl border-[3px] border-[#1C3B5A] bg-card overflow-hidden shadow-lg hidden md:block">
+      <div className="h-1.5 w-full" style={{ background: "#1AAFCC" }} />
       <div className="flex items-start justify-between px-4 pt-3 pb-2 border-b border-border">
         <div className="flex-1">
           <div className="flex items-center gap-1.5 mb-1">
@@ -194,8 +200,8 @@ export function DesktopStopDetail({ stop, onClose }: Props) {
           </div>
           <h2 className="text-sm font-bold text-foreground leading-tight">{stop.name}</h2>
         </div>
-        <button onClick={onClose} className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors">
-          <X className="w-4 h-4" />
+        <button onClick={onClose} className="ml-2 shrink-0 flex items-center justify-center w-9 h-9 rounded-full shadow-md active:scale-95 transition-transform" style={{ background: "#E8614A", color: "white" }} aria-label="Close">
+          <X className="w-5 h-5" strokeWidth={3} />
         </button>
       </div>
 
@@ -211,8 +217,8 @@ export function DesktopStopDetail({ stop, onClose }: Props) {
           <p className="text-[11px] leading-relaxed" style={{ color: config.textColor }}>{stop.tip}</p>
         </div>
         <Button onClick={handleDirections} size="sm" className="w-full gap-1.5 text-xs font-semibold">
-          <Navigation className="w-3.5 h-3.5" />
-          Get Directions
+          {paywalled ? <Lock className="w-3.5 h-3.5" /> : <Navigation className="w-3.5 h-3.5" />}
+          {paywalled ? "Get Directions · Unlock $8.69" : "Get Directions"}
         </Button>
       </div>
     </div>

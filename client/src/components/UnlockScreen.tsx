@@ -21,7 +21,7 @@ export default function UnlockScreen({ onDismiss }: { onDismiss?: () => void }) 
 
   return (
     // Backdrop
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(4px)" }}>
+    <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(4px)" }}>
       {/* Modal card */}
       <div className="relative w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl" style={{ background: "#1C3B5A" }}>
 
@@ -51,12 +51,13 @@ export default function UnlockScreen({ onDismiss }: { onDismiss?: () => void }) 
                   <div>🗺️ Map with pins</div>
                   <div>🌊 The Salt</div>
                   <div>⚡ Action Tings</div>
+                  <div>📍 Stop details</div>
                 </div>
               </div>
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-wide mb-1.5" style={{ color: "#1AAFCC" }}>Unlocked — $8.69</p>
                 <div className="space-y-1.5 text-xs text-white/80">
-                  <div>✅ Full stop details</div>
+                  <div>✅ Google Maps directions</div>
                   <div>✅ Ferry, Taxi, Weather</div>
                   <div>✅ Explore By Area</div>
                 </div>

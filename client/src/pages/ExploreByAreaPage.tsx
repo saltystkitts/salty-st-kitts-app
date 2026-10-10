@@ -176,9 +176,10 @@ function StopCard({ stop, onClose }: { stop: Stop; onClose: () => void }) {
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
       <div
-        className="relative z-10 w-full sm:max-w-lg bg-card rounded-t-3xl sm:rounded-2xl shadow-2xl overflow-hidden"
+        className="relative z-10 w-full sm:max-w-lg bg-card rounded-t-3xl sm:rounded-2xl shadow-2xl overflow-hidden border-[3px] border-b-0 sm:border-b-[3px] border-[#1C3B5A]"
         style={{ maxHeight: "85vh" }}
       >
+        <div className="h-1.5 w-full" style={{ background: "#1AAFCC" }} />
         {/* Header */}
         <div className="flex items-start justify-between p-5 pb-3">
           <div className="flex-1 pr-3">
@@ -197,8 +198,8 @@ function StopCard({ stop, onClose }: { stop: Stop; onClose: () => void }) {
               <MapPin className="w-3 h-3 inline" /> {stop.area}
             </p>
           </div>
-          <button onClick={onClose} className="p-2 rounded-full hover:bg-muted transition-colors shrink-0">
-            <X className="w-5 h-5 text-muted-foreground" />
+          <button onClick={onClose} className="shrink-0 flex items-center justify-center w-11 h-11 rounded-full shadow-md active:scale-95 transition-transform" style={{ background: "#E8614A", color: "white" }} aria-label="Close">
+            <X className="w-6 h-6" strokeWidth={3} />
           </button>
         </div>
 
