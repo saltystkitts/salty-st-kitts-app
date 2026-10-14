@@ -119,7 +119,7 @@ export default function UnlockScreen({ onDismiss }: { onDismiss?: () => void }) 
           </button>
 
           <p className="mt-4 text-[10px] leading-snug text-center text-white/35">
-            Nobody pays to be here. Everything's based on years of experience and preference, and subject to change.
+            Nobody pays to be here. Everything's based on years of experience, preference and subject to change.💚💛❤
           </p>
         </div>
       </div>

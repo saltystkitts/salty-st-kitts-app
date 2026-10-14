@@ -8,11 +8,15 @@ const CATEGORIES: { value: Category; label: string; icon: React.ComponentType<{ 
   { value: "nature",       label: "The Bush",     icon: TreePine },
   { value: "loot",         label: "Grocery",      icon: Avocado },
   { value: "food_nightlife",label: "Lime & Dine", icon: UtensilsCrossed },
-  { value: "the_salt",     label: "The Salt",     icon: Waves },
+  { value: "the_salt",     label: "The Salt",     icon: SaltIcon },
 ];
 
 function Avocado({ className }: { className?: string }) {
   return <span className={`${className ?? ""} inline-flex items-center justify-center leading-none text-[13px]`} aria-hidden>🥑</span>;
+}
+
+function SaltIcon({ className }: { className?: string }) {
+  return <span className={`${className ?? ""} inline-flex items-center justify-center leading-none text-[13px]`} aria-hidden>🧂</span>;
 }
 
 interface Props {
