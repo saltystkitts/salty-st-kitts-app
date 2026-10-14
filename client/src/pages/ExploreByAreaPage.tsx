@@ -21,7 +21,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   food_nightlife:"Lime & Dine",
   beach:         "Beaches",
   scenic_drive:  "Drives",
-  loot:          "Loot",
+  loot:          "Grocery",
 };
 
 const CATEGORY_EMOJI: Record<string, string> = {
@@ -30,7 +30,7 @@ const CATEGORY_EMOJI: Record<string, string> = {
   food_nightlife:"🍹",
   beach:         "🏖️",
   scenic_drive:  "🚗",
-  loot:          "🛍️",
+  loot:          "🥑",
 };
 
 // Zone definitions — area strings that belong to each zone
@@ -164,9 +164,9 @@ const VIBES = [
   },
   {
     id: "shop",
-    name: "Loot Hunter",
-    emoji: "🛍️",
-    subtitle: "Local crafts, markets & take-home goods",
+    name: "Groceries & Booze",
+    emoji: "🥑",
+    subtitle: "Where to shop, what to buy, and where to find it.",
     categories: ["loot"],
   },
 ];

@@ -7,8 +7,12 @@ const CATEGORIES: { value: Category; label: string; icon: React.ComponentType<{ 
   { value: "nature",       label: "The Bush",     icon: TreePine },
   { value: "food_nightlife",label: "Lime & Dine", icon: UtensilsCrossed },
   { value: "beach",        label: "Beaches",      icon: Waves },
-  { value: "loot",         label: "Loot",         icon: ShoppingBag },
+  { value: "loot",         label: "Grocery",      icon: Avocado },
 ];
+
+function Avocado({ className }: { className?: string }) {
+  return <span className={`${className ?? ""} inline-flex items-center justify-center leading-none text-[13px]`} aria-hidden>🥑</span>;
+}
 
 interface Props {
   category: Category;

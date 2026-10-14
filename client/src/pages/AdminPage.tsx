@@ -20,7 +20,7 @@ const CATEGORIES = [
   { value: "nature", label: "The Bush" },
   { value: "food_nightlife", label: "Lime & Dine" },
   { value: "beach", label: "Beaches" },
-  { value: "loot", label: "Loot" },
+  { value: "loot", label: "Grocery" },
 ];
 
 function authHeaders() {
@@ -642,7 +642,7 @@ export default function AdminPage() {
             )}
 
             {filterCat === "loot" && (
-              <p className="text-xs text-muted-foreground">Use ▲▼ to set the order Loot shows in the list. The map isn't affected.</p>
+              <p className="text-xs text-muted-foreground">Use ▲▼ to set the order Grocery shows in the list. The map isn't affected.</p>
             )}
             {filteredStops.map((stop, i) => filterCat === "loot" ? (
               <div key={stop.id} className="flex gap-2 items-start">

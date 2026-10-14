@@ -35,8 +35,8 @@ export const CATEGORY_CONFIG = {
     mapColor: "#7c3aed",
   },
   loot: {
-    label: "Loot",
-    emoji: "🛍️",
+    label: "Grocery",
+    emoji: "🥑",
     bgColor: "hsl(330 70% 92%)",
     textColor: "hsl(330 60% 28%)",
     mapColor: "#be185d",
