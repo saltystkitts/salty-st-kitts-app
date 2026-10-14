@@ -3,11 +3,11 @@ import { Landmark, TreePine, UtensilsCrossed, Waves, Car, LayoutGrid, ShoppingBa
 
 const CATEGORIES: { value: Category; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { value: "all",          label: "All",          icon: LayoutGrid },
+  { value: "beach",        label: "Beaches",      icon: Waves },
   { value: "historical",   label: "History",      icon: Landmark },
   { value: "nature",       label: "The Bush",     icon: TreePine },
-  { value: "food_nightlife",label: "Lime & Dine", icon: UtensilsCrossed },
-  { value: "beach",        label: "Beaches",      icon: Waves },
   { value: "loot",         label: "Grocery",      icon: Avocado },
+  { value: "food_nightlife",label: "Lime & Dine", icon: UtensilsCrossed },
   { value: "the_salt",     label: "The Salt",     icon: Waves },
 ];
 
