@@ -9,7 +9,6 @@ const FREE_TABS: AppTab[] = ["map", "salt", "actiontings"];
 const MAIN_TABS: { id: AppTab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { id: "map",         label: "Explore",      icon: Map },
   { id: "actiontings", label: "Action Tings", icon: Zap },
-  { id: "salt",        label: "The Salt",     icon: Waves },
 ];
 
 const MORE_TABS: { id: AppTab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [

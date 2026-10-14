@@ -8,6 +8,7 @@ const CATEGORIES: { value: Category; label: string; icon: React.ComponentType<{ 
   { value: "food_nightlife",label: "Lime & Dine", icon: UtensilsCrossed },
   { value: "beach",        label: "Beaches",      icon: Waves },
   { value: "loot",         label: "Grocery",      icon: Avocado },
+  { value: "the_salt",     label: "The Salt",     icon: Waves },
 ];
 
 function Avocado({ className }: { className?: string }) {

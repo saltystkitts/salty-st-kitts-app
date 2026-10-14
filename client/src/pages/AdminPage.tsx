@@ -2,7 +2,7 @@ import { PageEditor } from "../components/PageEditor";
 import { imgSrc } from "../lib/nativeApi";
 import { useState, useEffect } from "react";
 import { Lock, LogOut, MapPin, Waves, Eye, EyeOff, Pencil, Trash2, Plus, Check, X, ChevronUp, ChevronDown } from "lucide-react";
-import { byManualOrder, stopListSort } from "../lib/order";
+import { byManualOrder, stopListSort, MANUAL_ORDER_CATEGORIES } from "../lib/order";
 
 const ADMIN_PASSWORD = "salty2026";
 
@@ -641,10 +641,10 @@ export default function AdminPage() {
               <NewStopForm onSaved={() => { setAddingStop(false); loadStops(); }} onCancel={() => setAddingStop(false)} />
             )}
 
-            {filterCat === "loot" && (
-              <p className="text-xs text-muted-foreground">Use ▲▼ to set the order Grocery shows in the list. The map isn't affected.</p>
+            {MANUAL_ORDER_CATEGORIES.includes(filterCat) && (
+              <p className="text-xs text-muted-foreground">Use ▲▼ to set the order these show in the list (and in All). The map isn't affected.</p>
             )}
-            {filteredStops.map((stop, i) => filterCat === "loot" ? (
+            {filteredStops.map((stop, i) => MANUAL_ORDER_CATEGORIES.includes(filterCat) ? (
               <div key={stop.id} className="flex gap-2 items-start">
                 {arrows(() => saveOrder("stops", filteredStops, i, -1), () => saveOrder("stops", filteredStops, i, 1), i === 0, i === filteredStops.length - 1)}
                 <div className="flex-1 min-w-0"><StopRow stop={stop} onUpdate={loadStops} onDelete={loadStops} /></div>
