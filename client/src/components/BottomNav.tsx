@@ -123,9 +123,6 @@ export function BottomNav({ active, onChange, unlocked = false, onUpgrade }: Pro
         >
           <div className="relative">
             <MoreHorizontal className="w-5 h-5" />
-            {!unlocked && (
-              <Lock className="w-2.5 h-2.5 absolute -top-1 -right-1.5" style={{ color: "#E8614A" }} />
-            )}
           </div>
           <span className="text-xs font-semibold">More</span>
           {(isMoreActive || morOpen) && (

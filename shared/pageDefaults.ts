@@ -255,6 +255,8 @@ export const PAGE_DEFAULTS = {
       paid_items: ["✅ Google Maps directions", "✅ Ferry, Taxi, Weather", "✅ Explore By Area"],
       button: "Unlock for $8.69 — one time",
       code_link: "Already paid? Enter your code",
+      redeem_link: "Have a code?",
+      restore_link: "Restore purchase",
       skip: "Continue with free version",
     },
     feedback: {
@@ -270,6 +272,7 @@ export const PAGE_DEFAULTS = {
       beer_text: "Keeps this app alive, updated, and salty.",
       beer_button: "Buy me a beer →",
       beer_link: "",
+      beer_thanks: "Cheers! 🍺 Thank you.",
       causes: [
         { name: "🌊 St Kitts Coastal Alliance", description: "Founded by Salty St Kitts. Protecting our coastline and the communities who live on it. Support goes straight into work on the island.", button: "Support the cause →", link: "https://stkittscoastalalliance.org/#support" },
         { name: "🩺 PALS", description: "Medical care for the children of St Kitts & Nevis.", button: "Visit →", link: "https://palsstkitts.org/" },

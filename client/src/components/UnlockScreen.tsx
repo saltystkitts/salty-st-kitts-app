@@ -3,15 +3,37 @@ import { useUnlock } from "../context/UnlockContext";
 import { X } from "lucide-react";
 import saltyLogo from "@assets/salty-icon-new.png";
 import { usePageContent } from "@/lib/pageContent";
+import { openRedeemCode } from "@/lib/iap";
 
 export default function UnlockScreen({ onDismiss }: { onDismiss?: () => void }) {
-  const { unlock, stripeLink } = useUnlock();
+  const { unlock, stripeLink, ios, unlockPrice, buyUnlock, restore } = useUnlock();
   const w = usePageContent("wording");
   const u = w.unlock_popup;
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showCode, setShowCode] = useState(false);
+  const [busy, setBusy] = useState<"" | "buy" | "restore">("");
+  const [note, setNote] = useState("");
+
+  // iPhone: show Apple's local price (e.g. CA$ for Canadians) in place of $8.69
+  const buttonText = ios && unlockPrice ? u.button.replace("$8.69", unlockPrice) : u.button;
+
+  async function handleBuy() {
+    setBusy("buy"); setNote("");
+    const r = await buyUnlock();
+    setBusy("");
+    if (r === "ok") onDismiss?.();
+    else if (r !== "cancelled") setNote(r);
+  }
+
+  async function handleRestore() {
+    setBusy("restore"); setNote("");
+    const owned = await restore();
+    setBusy("");
+    if (owned) onDismiss?.();
+    else setNote("No purchase found for this Apple ID.");
+  }
 
   async function handleUnlock() {
     if (!code.trim()) return;
@@ -64,6 +86,28 @@ export default function UnlockScreen({ onDismiss }: { onDismiss?: () => void }) 
           </div>
 
           {/* CTA */}
+          {ios ? (
+            <>
+              <button
+                onClick={handleBuy}
+                disabled={!!busy}
+                className="w-full block text-center font-bold text-white py-3.5 rounded-2xl mb-3 shadow-lg transition-opacity disabled:opacity-60 text-sm"
+                style={{ background: "#E8614A" }}
+              >
+                {busy === "buy" ? "One sec..." : buttonText}
+              </button>
+              {note && <p className="text-xs text-center mb-2" style={{ color: "#E8614A" }}>{note}</p>}
+              <div className="flex items-center justify-center gap-4">
+                <button onClick={openRedeemCode} className="text-xs underline" style={{ color: "#1AAFCC" }}>
+                  {u.redeem_link}
+                </button>
+                <button onClick={handleRestore} disabled={!!busy} className="text-xs underline" style={{ color: "#1AAFCC" }}>
+                  {busy === "restore" ? "Checking..." : u.restore_link}
+                </button>
+              </div>
+            </>
+          ) : (
+          <>
           <a
             href={stripeLink}
             target="_blank"
@@ -103,6 +147,8 @@ export default function UnlockScreen({ onDismiss }: { onDismiss?: () => void }) 
                 {loading ? "Checking..." : "Unlock"}
               </button>
             </div>
+          )}
+          </>
           )}
 
           {/* Skip */}
