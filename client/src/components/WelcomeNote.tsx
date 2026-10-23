@@ -10,7 +10,7 @@ export default function WelcomeNote({ onDone }: { onDone: () => void }) {
         <div className="h-1.5 w-full" style={{ background: "#1AAFCC" }} />
         <div className="px-6 pt-7 pb-6 flex flex-col items-center text-center">
           <img src={saltyLogo} alt="Salty St Kitts" className="w-16 h-16 rounded-2xl object-cover mb-4 shadow-md" />
-          <h2 className="text-2xl font-extrabold text-foreground mb-4">{w.title}</h2>
+          <h2 className="text-xl font-extrabold text-foreground mb-4 text-balance">{w.title}</h2>
           {w.line_1 && <p className="text-base leading-relaxed text-foreground mb-2">{w.line_1}</p>}
           {w.line_2 && <p className="text-base leading-relaxed text-foreground mb-4">{w.line_2}</p>}
           {w.signature && <p className="text-sm leading-relaxed text-muted-foreground mb-6">{w.signature}</p>}

@@ -201,11 +201,11 @@ export const PAGE_DEFAULTS = {
       title: "Welcome to Salty St Kitts 🧂",
       line_1: "Created by a salty expat who washed up here almost 10 years ago and never left.",
       line_2: "Built out of need and convenience.",
-      signature: "Nobody pays to be here. Everything's based on years of experience, preference and subject to change.💚💛❤",
+      signature: "Nobody pays to be here. Everything's based on years of experience, preference and subject to change.💚💛❤️",
       button: "Let's go →",
     },
     notes: {
-      nobody_pays: "Nobody pays to be here. Everything's based on years of experience, preference and subject to change.💚💛❤",
+      nobody_pays: "Nobody pays to be here. Everything's based on years of experience, preference and subject to change.💚💛❤️",
       beaches: "🏖️ All beaches in St Kitts are free and open to the public. You may be charged for amenities, but you can always access the beach. Swim at your own risk and to your ability. Leave only footprints.",
     },
     category_bar: {
@@ -263,7 +263,7 @@ export const PAGE_DEFAULTS = {
       email_subject: "Salty St Kitts app",
     },
     give_back: {
-      menu_label: "💚💛❤ Give Back",
+      menu_label: "💚💛❤️ Give Back",
       title: "Give Back",
       subtitle: "Love the guide? Here's how to give back.",
       beer_title: "🍺 Buy me a beer — $3.99",
