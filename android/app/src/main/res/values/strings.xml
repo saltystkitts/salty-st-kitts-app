@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Salty St Kitts</string>
+    <string name="title_activity_main">Salty St Kitts</string>
+    <string name="package_name">com.saltystkitts.guide</string>
+    <string name="custom_url_scheme">com.saltystkitts.guide</string>
+</resources>
