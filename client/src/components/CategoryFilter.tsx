@@ -1,23 +1,15 @@
 import type { Category } from "../pages/TourApp";
-import { Landmark, TreePine, UtensilsCrossed, Waves, Car, LayoutGrid, ShoppingBag, Zap, Newspaper } from "lucide-react";
+import { usePageContent } from "@/lib/pageContent";
 
-const CATEGORIES: { value: Category; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
-  { value: "all",          label: "All",          icon: LayoutGrid },
-  { value: "beach",        label: "Beaches",      icon: Waves },
-  { value: "historical",   label: "History",      icon: Landmark },
-  { value: "nature",       label: "The Bush",     icon: TreePine },
-  { value: "loot",         label: "Grocery",      icon: Avocado },
-  { value: "food_nightlife",label: "Lime & Dine", icon: UtensilsCrossed },
-  { value: "the_salt",     label: "The Salt",     icon: SaltIcon },
+const CATEGORIES: { value: Category; emoji: string }[] = [
+  { value: "all",            emoji: "🌴" },
+  { value: "beach",          emoji: "🏖️" },
+  { value: "historical",     emoji: "🏛️" },
+  { value: "nature",         emoji: "🌿" },
+  { value: "loot",           emoji: "🥑" },
+  { value: "food_nightlife", emoji: "🍹" },
+  { value: "the_salt",       emoji: "🧂" },
 ];
-
-function Avocado({ className }: { className?: string }) {
-  return <span className={`${className ?? ""} inline-flex items-center justify-center leading-none text-[13px]`} aria-hidden>🥑</span>;
-}
-
-function SaltIcon({ className }: { className?: string }) {
-  return <span className={`${className ?? ""} inline-flex items-center justify-center leading-none text-[13px]`} aria-hidden>🧂</span>;
-}
 
 interface Props {
   category: Category;
@@ -25,6 +17,7 @@ interface Props {
 }
 
 export function CategoryFilter({ category, onChange }: Props) {
+  const w = usePageContent("wording");
   return (
     <div
       className="flex gap-1.5 px-3 py-2 border-b border-border bg-background overflow-x-auto shrink-0 scrollbar-none"
@@ -32,7 +25,7 @@ export function CategoryFilter({ category, onChange }: Props) {
       data-testid="category-filter"
     >
       {CATEGORIES.map(cat => {
-        const Icon = cat.icon;
+        const label = (w.category_bar as any)[cat.value] || cat.value;
         const active = category === cat.value;
         return (
           <button
@@ -40,7 +33,7 @@ export function CategoryFilter({ category, onChange }: Props) {
             onClick={() => onChange(cat.value)}
             data-testid={`filter-${cat.value}`}
             className={`
-              flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap
+              flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-semibold whitespace-nowrap
               transition-all duration-150 border flex-shrink-0
               ${active
                 ? "bg-primary text-primary-foreground border-primary shadow-sm"
@@ -48,8 +41,8 @@ export function CategoryFilter({ category, onChange }: Props) {
               }
             `}
           >
-            <Icon className="w-3.5 h-3.5" />
-            {cat.label}
+            <span className="text-base leading-none" aria-hidden>{cat.emoji}</span>
+            {label}
           </button>
         );
       })}

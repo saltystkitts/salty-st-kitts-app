@@ -39,7 +39,7 @@ function TextField({ value, onChange }: { value: string; onChange: (v: string) =
 }
 
 function Field({ name, value, onChange, depth }: { name: string; value: any; onChange: (v: any) => void; depth: number }) {
-  const label = <label className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground block mb-1">{pretty(name)}</label>;
+  const label = <label className="text-[13px] font-bold uppercase tracking-wide text-muted-foreground block mb-1">{pretty(name)}</label>;
 
   if (typeof value === "string") {
     return <div>{label}<TextField value={value} onChange={onChange} /></div>;

@@ -256,7 +256,7 @@ function StopRow({ stop, onUpdate, onDelete }: { stop: any; onUpdate: () => void
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="font-semibold text-sm text-foreground truncate">{stop.name}</span>
-          <span className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wide"
+          <span className="text-[12px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wide"
             style={{ background: "hsl(192 78% 90%)", color: "hsl(192 60% 22%)" }}>
             {CATEGORIES.find(c => c.value === stop.category)?.label ?? stop.category}
           </span>

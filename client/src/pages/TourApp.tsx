@@ -12,6 +12,7 @@ import { StopSheet, DesktopStopDetail } from "../components/StopSheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Map, X } from "lucide-react";
 import TheSaltPage from "./TheSaltPage";
+import { usePageContent } from "@/lib/pageContent";
 
 export type Category = "all" | "historical" | "nature" | "food_nightlife" | "beach" | "scenic_drive" | "loot" | "the_salt" | "action_tings";
 
@@ -45,6 +46,7 @@ interface TourAppProps {
 }
 
 export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) {
+  const w = usePageContent("wording");
   const [category, setCategory] = useState<Category>("all");
   const [selectedStop, setSelectedStop] = useState<Stop | null>(null);
   const [mapCenter, setMapCenter] = useState<[number, number]>([17.3, -62.75]);
@@ -89,20 +91,18 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
 
       {/* Subtext */}
       <div className="px-4 py-1.5 bg-muted/40 border-b border-border shrink-0">
-        <p className="text-xs text-muted-foreground font-medium italic">{SUBTEXT[category]}</p>
+        <p className="text-xs text-muted-foreground font-medium italic">{(w.taglines as any)[category] ?? SUBTEXT[category]}</p>
       </div>
 
       {(category === "food_nightlife" || category === "loot") && (
         <div className="px-4 py-2 border-b border-border shrink-0" style={{ background: "#E8614A14" }}>
-          <p className="text-xs leading-snug text-foreground/80">Nobody pays to be here. Everything's based on years of experience, preference and subject to change.💚💛❤</p>
+          <p className="text-xs leading-snug text-foreground/80">{w.notes.nobody_pays}</p>
         </div>
       )}
 
       {category === "beach" && (
         <div className="px-4 py-2 border-b border-border shrink-0" style={{ background: "#1AAFCC14" }}>
-          <p className="text-xs leading-snug text-foreground/80">
-            🏖️ All beaches in St Kitts are free and open to the public. You may be charged for amenities, but you can always access the beach. Swim at your own risk and to your ability. Leave only footprints.
-          </p>
+          <p className="text-xs leading-snug text-foreground/80">{w.notes.beaches}</p>
         </div>
       )}
 

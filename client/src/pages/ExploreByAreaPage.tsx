@@ -1,3 +1,4 @@
+import { usePageContent } from "@/lib/pageContent";
 import { byDistanceFromFrigate } from "@/lib/distance";
 import { useState, useEffect } from "react";
 import { ChevronRight, ChevronDown, MapPin, X } from "lucide-react";
@@ -336,6 +337,9 @@ function VibeCard({
 }
 
 export default function ExploreByAreaPage() {
+  const w = usePageContent("wording");
+  const zones = ZONES.map(z => ({ ...z, ...((w.explore_by_area.zones as any)[z.id] || {}) }));
+  const vibes = VIBES.map(v => ({ ...v, ...((w.explore_by_area.vibes as any)[v.id] || {}) }));
   const [stops, setStops] = useState<Stop[]>([]);
   const [mode, setMode] = useState<"area" | "vibe">("area");
   const [openId, setOpenId] = useState<string | null>(null);
@@ -370,8 +374,8 @@ export default function ExploreByAreaPage() {
     <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
       <div className="px-4 pt-4 pb-3 shrink-0">
-        <h1 className="text-xl font-bold">Explore</h1>
-        <p className="text-xs text-muted-foreground mt-0.5">Every spot on the island, your way</p>
+        <h1 className="text-xl font-bold">{w.explore_by_area.title}</h1>
+        <p className="text-xs text-muted-foreground mt-0.5">{w.explore_by_area.subtitle}</p>
 
         {/* Toggle */}
         <div
@@ -404,7 +408,7 @@ export default function ExploreByAreaPage() {
       {/* List */}
       <div className="flex-1 overflow-y-auto px-4 pb-6">
         {mode === "area" &&
-          ZONES.map((zone) => {
+          zones.map((zone) => {
             const zoneStops = stopsForZone(zone);
             return (
               <ZoneCard
@@ -419,7 +423,7 @@ export default function ExploreByAreaPage() {
           })}
 
         {mode === "vibe" &&
-          VIBES.map((vibe) => {
+          vibes.map((vibe) => {
             const vibeStops = stopsForVibe(vibe);
             return (
               <VibeCard

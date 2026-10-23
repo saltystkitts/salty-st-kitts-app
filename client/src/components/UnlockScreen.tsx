@@ -2,9 +2,12 @@ import { useState } from "react";
 import { useUnlock } from "../context/UnlockContext";
 import { X } from "lucide-react";
 import saltyLogo from "@assets/salty-icon-new.png";
+import { usePageContent } from "@/lib/pageContent";
 
 export default function UnlockScreen({ onDismiss }: { onDismiss?: () => void }) {
   const { unlock, stripeLink } = useUnlock();
+  const w = usePageContent("wording");
+  const u = w.unlock_popup;
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -31,35 +34,30 @@ export default function UnlockScreen({ onDismiss }: { onDismiss?: () => void }) 
             localStorage.setItem("salty_seen_paywall", "true");
             onDismiss?.();
           }}
-          className="absolute top-4 right-4 p-1.5 rounded-full transition-colors hover:bg-white/10"
+          className="absolute top-3 right-3 flex items-center justify-center w-10 h-10 rounded-full shadow-md active:scale-95 transition-transform" style={{ background: "#E8614A" }} aria-label="Close"
         >
-          <X className="w-4 h-4 text-white/60" />
+          <X className="w-5 h-5 text-white" strokeWidth={3} />
         </button>
 
         <div className="px-6 pt-8 pb-7 flex flex-col items-center">
           {/* Logo */}
           <img src={saltyLogo} alt="Salty St Kitts" className="w-16 h-16 rounded-2xl object-cover mb-4 shadow-lg" />
-          <h2 className="text-xl font-extrabold text-white text-center mb-0.5">Salty St Kitts</h2>
-          <p className="text-sm mb-6" style={{ color: "#1AAFCC" }}>The Guide</p>
+          <h2 className="text-xl font-extrabold text-white text-center mb-0.5">{u.title}</h2>
+          <p className="text-sm mb-6" style={{ color: "#1AAFCC" }}>{u.subtitle}</p>
 
           {/* Free vs Paid */}
           <div className="w-full rounded-2xl p-4 mb-5 space-y-2" style={{ background: "rgba(255,255,255,0.07)" }}>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-wide mb-1.5" style={{ color: "rgba(255,255,255,0.4)" }}>Free</p>
+                <p className="text-[12px] font-bold uppercase tracking-wide mb-1.5" style={{ color: "rgba(255,255,255,0.5)" }}>{u.free_label}</p>
                 <div className="space-y-1.5 text-xs text-white/70">
-                  <div>🗺️ Map with pins</div>
-                  <div>🌊 The Salt</div>
-                  <div>⚡ Action Tings</div>
-                  <div>📍 Stop details</div>
+                  {u.free_items.filter(Boolean).map((t, i) => <div key={i}>{t}</div>)}
                 </div>
               </div>
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-wide mb-1.5" style={{ color: "#1AAFCC" }}>Unlocked — $8.69</p>
+                <p className="text-[12px] font-bold uppercase tracking-wide mb-1.5" style={{ color: "#1AAFCC" }}>{u.paid_label}</p>
                 <div className="space-y-1.5 text-xs text-white/80">
-                  <div>✅ Google Maps directions</div>
-                  <div>✅ Ferry, Taxi, Weather</div>
-                  <div>✅ Explore By Area</div>
+                  {u.paid_items.filter(Boolean).map((t, i) => <div key={i}>{t}</div>)}
                 </div>
               </div>
             </div>
@@ -73,13 +71,13 @@ export default function UnlockScreen({ onDismiss }: { onDismiss?: () => void }) 
             className="w-full block text-center font-bold text-white py-3.5 rounded-2xl mb-3 shadow-lg transition-opacity hover:opacity-90 text-sm"
             style={{ background: "#E8614A" }}
           >
-            Unlock for $8.69 — one time
+            {u.button}
           </a>
 
           {/* Code entry */}
           {!showCode ? (
             <button onClick={() => setShowCode(true)} className="text-xs underline" style={{ color: "#1AAFCC" }}>
-              Already paid? Enter your code
+              {u.code_link}
             </button>
           ) : (
             <div className="w-full space-y-2">
@@ -113,13 +111,13 @@ export default function UnlockScreen({ onDismiss }: { onDismiss?: () => void }) 
               localStorage.setItem("salty_seen_paywall", "true");
               onDismiss?.();
             }}
-            className="mt-5 text-xs text-white/30 underline"
+            className="mt-5 text-sm text-white/60 underline"
           >
-            Continue with free version
+            {u.skip}
           </button>
 
-          <p className="mt-4 text-[10px] leading-snug text-center text-white/35">
-            Nobody pays to be here. Everything's based on years of experience, preference and subject to change.💚💛❤
+          <p className="mt-4 text-xs leading-snug text-center text-white/55">
+            {w.notes.nobody_pays}
           </p>
         </div>
       </div>

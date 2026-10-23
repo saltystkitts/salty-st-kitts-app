@@ -82,7 +82,16 @@ export default {
           offline: "rgb(156 163 175)",
         },
       },
+      // Bigger, easier-to-read type across the app
+      fontSize: {
+        xs: ["0.875rem", { lineHeight: "1.3rem" }],    // 14px (was 12)
+        sm: ["1rem", { lineHeight: "1.5rem" }],        // 16px (was 14)
+        base: ["1.0625rem", { lineHeight: "1.65rem" }], // 17px (was 16)
+        lg: ["1.1875rem", { lineHeight: "1.7rem" }],   // 19px
+        xl: ["1.375rem", { lineHeight: "1.85rem" }],   // 22px
+      },
       fontFamily: {
+        display: ["'Cabinet Grotesk'", "'Satoshi'", "system-ui", "sans-serif"],
         sans: ["var(--font-sans)"],
         serif: ["var(--font-serif)"],
         mono: ["var(--font-mono)"],

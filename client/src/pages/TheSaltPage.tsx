@@ -1,3 +1,4 @@
+import { usePageContent } from "@/lib/pageContent";
 import { byManualOrder } from "@/lib/order";
 import { Waves } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
@@ -18,6 +19,7 @@ function formatDate(dateStr: string) {
 }
 
 export default function TheSaltPage() {
+  const w = usePageContent("wording");
   const { data: posts = [], isLoading } = useQuery<SaltPost[]>({
     queryKey: ["/api/salt-posts"],
     queryFn: () => fetch("/api/salt-posts").then(r => r.json()),
@@ -28,13 +30,13 @@ export default function TheSaltPage() {
       {/* Header banner */}
       <div className="px-4 py-4 border-b border-border shrink-0" style={{ background: "#1C3B5A" }}>
         <div className="flex items-center gap-2 mb-1">
-          <Waves className="w-5 h-5" style={{ color: "#1AAFCC" }} />
+          <span className="text-xl leading-none" aria-hidden>🧂</span>
           <h1 className="font-extrabold text-lg text-white" style={{ fontFamily: "'Cabinet Grotesk', sans-serif" }}>
-            The Salt
+            {w.the_salt_header.title}
           </h1>
         </div>
         <p className="text-sm" style={{ color: "#1AAFCC" }}>
-          Unfiltered local knowledge. No fluff, no tourist trap nonsense.
+          {w.the_salt_header.subtitle}
         </p>
       </div>
 
@@ -56,7 +58,7 @@ export default function TheSaltPage() {
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-xl">{post.emoji}</span>
                   <span
-                    className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full"
+                    className="text-[12px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full"
                     style={{ background: "hsl(192 78% 90%)", color: "hsl(192 60% 22%)" }}
                   >
                     {post.tag}

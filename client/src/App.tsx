@@ -16,9 +16,11 @@ import HolidaysPage from "./pages/HolidaysPage";
 import ExploreByAreaPage from "./pages/ExploreByAreaPage";
 import TaxiPage from "./pages/TaxiPage";
 import AdminPage from "./pages/AdminPage";
+import GiveBackPage from "./pages/GiveBackPage";
+import WelcomeNote from "./components/WelcomeNote";
 
 // Pages that are free for everyone
-const FREE_TABS: AppTab[] = ["map", "salt", "actiontings"];
+const FREE_TABS: AppTab[] = ["map", "salt", "actiontings", "giveback"];
 
 function MainApp() {
   const { unlocked } = useUnlock();
@@ -26,14 +28,15 @@ function MainApp() {
   const [adminMode, setAdminMode] = useState(false);
   const [tapCount, setTapCount] = useState(0);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(() => !localStorage.getItem("salty_seen_welcome"));
 
   // Show paywall on first visit if not unlocked
   useEffect(() => {
     const seen = localStorage.getItem("salty_seen_paywall");
-    if (!unlocked && !seen) {
+    if (!unlocked && !seen && !showWelcome) {
       setShowPaywall(true);
     }
-  }, [unlocked]);
+  }, [unlocked, showWelcome]);
 
   // If user unlocked, hide paywall
   useEffect(() => {
@@ -75,6 +78,8 @@ function MainApp() {
 
   return (
     <div className="flex flex-col h-[100dvh] bg-background overflow-hidden">
+      {showWelcome && <WelcomeNote onDone={() => setShowWelcome(false)} />}
+
       {/* Paywall overlay */}
       {showPaywall && !unlocked && (
         <UnlockScreen onDismiss={() => {
@@ -92,6 +97,7 @@ function MainApp() {
         {tab === "map"        && <TourApp paywalled={!unlocked} onUpgrade={() => setShowPaywall(true)} />}
         {tab === "salt"       && <TheSaltPage />}
         {tab === "actiontings" && <ActionTingsPage />}
+        {tab === "giveback"    && <GiveBackPage />}
 
         {/* Paid tabs — only render if unlocked */}
         {unlocked && tab === "weather"      && <WeatherPage />}

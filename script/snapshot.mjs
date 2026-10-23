@@ -8,7 +8,7 @@ const API = "https://salty-st-kitts-app-production.up.railway.app";
 const OUT_JSON = "client/src/offline/snapshot.json";
 const IMG_DIR = "client/public/offline/images";
 const CATEGORIES = ["historical", "nature", "food_nightlife", "beach", "scenic_drive", "loot"];
-const PAGES = ["ferry", "taxi", "holidays", "weather", "action_tings"];
+const PAGES = ["ferry", "taxi", "holidays", "weather", "action_tings", "wording"];
 
 async function get(p) {
   const r = await fetch(API + p);

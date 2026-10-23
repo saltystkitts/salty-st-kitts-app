@@ -40,3 +40,10 @@
   font-display: swap;
   font-style: normal;
 }
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/GHM6WVH6MILNYOOCXHXB5GTSGNTMGXZR.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+  font-style: normal;
+}

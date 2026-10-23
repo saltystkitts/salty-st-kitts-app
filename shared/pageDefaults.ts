@@ -195,6 +195,88 @@ export const PAGE_DEFAULTS = {
   weather: {
     salty_take: "It's the Caribbean — warm, sunny, and occasionally dramatic. Expect temperatures in the mid-80s°F year-round, with brief afternoon showers that usually clear within 20 minutes. Hurricane season runs June through November, but direct hits are rare. Pack sunscreen and a light layer for the AC. You won't need an umbrella, but you'll definitely need the sunscreen.",
   },
+
+  wording: {
+    welcome: {
+      title: "Welcome to Salty St Kitts 🧂",
+      line_1: "Created by a salty expat who washed up here almost 10 years ago and never left.",
+      line_2: "Built out of need and convenience.",
+      signature: "Nobody pays to be here. Everything's based on years of experience, preference and subject to change.💚💛❤",
+      button: "Let's go →",
+    },
+    notes: {
+      nobody_pays: "Nobody pays to be here. Everything's based on years of experience, preference and subject to change.💚💛❤",
+      beaches: "🏖️ All beaches in St Kitts are free and open to the public. You may be charged for amenities, but you can always access the beach. Swim at your own risk and to your ability. Leave only footprints.",
+    },
+    category_bar: {
+      all: "All", beach: "Beaches", historical: "History", nature: "The Bush",
+      loot: "Grocery", food_nightlife: "Lime & Dine", the_salt: "The Salt",
+    },
+    taglines: {
+      all: "Every spot worth your time on this rock",
+      beach: "Sand between your toes, Nevis in your face",
+      historical: "Where the bodies are buried (historically speaking)",
+      nature: "Trails, trailheads & jungle stuff",
+      loot: "Shop smart, not tourist",
+      food_nightlife: "Rum, fish & bad decisions",
+      the_salt: "Straight from the source",
+    },
+    the_salt_header: {
+      title: "The Salt",
+      subtitle: "Unfiltered local knowledge. No fluff, no tourist trap nonsense.",
+    },
+    explore_by_area: {
+      title: "Explore",
+      subtitle: "Every spot on the island, your way",
+      zones: {
+        basseterre: { name: "Basseterre", subtitle: "The capital — history, food & hustle" },
+        frigate: { name: "Frigate Bay & The Strip", subtitle: "Beach bars, eats & the good vibes zone" },
+        sep: { name: "Southeast Peninsula", subtitle: "Hidden bays, wild beaches & the end of the road" },
+        eastside: { name: "Eastside", subtitle: "Off the tourist map — real island life" },
+        northeast: { name: "The Northeast", subtitle: "Villages, rainforest & the windward side" },
+        dieppe: { name: "Dieppe Bay & The North", subtitle: "Black sand, fresh fish & the forgotten coast" },
+        sandypoint: { name: "Sandy Point & The Northwest", subtitle: "Brimstone Hill, rum history & the sunset coast" },
+        oldroad: { name: "Old Road & Middle Island", subtitle: "The first settlement — sugar ruins & deep roots" },
+      },
+      vibes: {
+        history: { name: "History Buff", subtitle: "Forts, ruins & stories that shaped the island" },
+        eat: { name: "Here to Eat", subtitle: "Local spots, beach bars & proper meals" },
+        beach: { name: "Beach Mode", subtitle: "Sand, water & nothing to do" },
+        active: { name: "Get Active", subtitle: "Hikes, trails & the real outdoors" },
+        shop: { name: "Groceries & Booze", subtitle: "Where to shop, what to buy, and where to find it." },
+      },
+    },
+    unlock_popup: {
+      title: "Salty St Kitts",
+      subtitle: "The Guide",
+      free_label: "Free",
+      free_items: ["🗺️ Map with pins", "🧂 The Salt", "⚡ Action Tings", "📍 Stop details"],
+      paid_label: "Unlocked — $8.69",
+      paid_items: ["✅ Google Maps directions", "✅ Ferry, Taxi, Weather", "✅ Explore By Area"],
+      button: "Unlock for $8.69 — one time",
+      code_link: "Already paid? Enter your code",
+      skip: "Continue with free version",
+    },
+    feedback: {
+      menu_label: "💬 Got a tip or spotted something wrong?",
+      email: "salty@saltystkitts.com",
+      email_subject: "Salty St Kitts app",
+    },
+    give_back: {
+      menu_label: "💚💛❤ Give Back",
+      title: "Give Back",
+      subtitle: "Love the guide? Here's how to give back.",
+      beer_title: "🍺 Buy me a beer — $3.99",
+      beer_text: "Keeps this app alive, updated, and salty.",
+      beer_button: "Buy me a beer →",
+      beer_link: "",
+      causes: [
+        { name: "🌊 St Kitts Coastal Alliance", description: "Founded by Salty St Kitts. Protecting our coastline and the communities who live on it. Support goes straight into work on the island.", button: "Support the cause →", link: "https://stkittscoastalalliance.org/#support" },
+        { name: "🩺 PALS", description: "Medical care for the children of St Kitts & Nevis.", button: "Visit →", link: "https://palsstkitts.org/" },
+        { name: "🐾 BARC", description: "Rescuing and rehoming animals across St Kitts.", button: "Visit →", link: "https://www.barcstkitts.com/" },
+      ],
+    },
+  },
 };
 
 export type PageKey = keyof typeof PAGE_DEFAULTS;
@@ -204,4 +286,5 @@ export const PAGE_LABELS: Record<PageKey, string> = {
   holidays: "Holidays",
   weather: "Weather",
   action_tings: "Action Tings",
+  wording: "📝 Wording",
 };

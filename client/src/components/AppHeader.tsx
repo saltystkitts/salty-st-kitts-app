@@ -21,7 +21,7 @@ export function AppHeader() {
           >
             Salty St Kitts
           </div>
-          <div className="text-[10px] leading-tight uppercase tracking-widest font-semibold" style={{ color: "#1AAFCC" }}>
+          <div className="text-[12px] leading-tight uppercase tracking-widest font-semibold" style={{ color: "#1AAFCC" }}>
             The Guide · saltystkitts.com
           </div>
         </div>

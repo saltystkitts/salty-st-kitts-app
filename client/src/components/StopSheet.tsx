@@ -62,7 +62,7 @@ const VIBE_LABELS: Record<string, { label: string; color: string }> = {
 function AttrBadge({ label, color }: { label: string; color: string }) {
   return (
     <span
-      className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold text-white"
+      className="inline-flex items-center px-2.5 py-1 rounded-full text-[13px] font-semibold text-white"
       style={{ background: color }}
     >
       {label}
@@ -118,11 +118,11 @@ export function StopSheet({ stop, onClose, paywalled = false, onUpgrade }: Props
         <div className="flex items-start justify-between px-5 py-3 border-b border-border">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full" style={{ background: config.bgColor, color: config.textColor }}>
+              <span className="text-[13px] font-semibold px-2 py-0.5 rounded-full" style={{ background: config.bgColor, color: config.textColor }}>
                 {config.emoji} {config.label}
               </span>
               {stop.featured && (
-                <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400">
+                <span className="text-[13px] font-semibold px-2 py-0.5 rounded-full bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400">
                   ⭐ Featured
                 </span>
               )}
@@ -194,7 +194,7 @@ export function DesktopStopDetail({ stop, onClose, paywalled = false, onUpgrade 
       <div className="flex items-start justify-between px-4 pt-3 pb-2 border-b border-border">
         <div className="flex-1">
           <div className="flex items-center gap-1.5 mb-1">
-            <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full" style={{ background: config.bgColor, color: config.textColor }}>
+            <span className="text-[12px] font-semibold px-1.5 py-0.5 rounded-full" style={{ background: config.bgColor, color: config.textColor }}>
               {config.emoji} {config.label}
             </span>
           </div>
@@ -214,7 +214,7 @@ export function DesktopStopDetail({ stop, onClose, paywalled = false, onUpgrade 
         <AttributeBadges stop={stop} />
         <div className="flex gap-2 p-2.5 rounded-lg" style={{ background: config.bgColor }}>
           <Lightbulb className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: config.textColor }} />
-          <p className="text-[11px] leading-relaxed" style={{ color: config.textColor }}>{stop.tip}</p>
+          <p className="text-[13px] leading-relaxed" style={{ color: config.textColor }}>{stop.tip}</p>
         </div>
         <Button onClick={handleDirections} size="sm" className="w-full gap-1.5 text-xs font-semibold">
           {paywalled ? <Lock className="w-3.5 h-3.5" /> : <Navigation className="w-3.5 h-3.5" />}

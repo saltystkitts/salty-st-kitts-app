@@ -1,10 +1,11 @@
 import { Map, Zap, Waves, MoreHorizontal, CalendarDays, Compass, Car, Lock } from "lucide-react";
 import { useState } from "react";
+import { usePageContent } from "@/lib/pageContent";
 import { Ship, CloudSun } from "lucide-react";
 
-export type AppTab = "map" | "actiontings" | "salt" | "weather" | "ferry" | "holidays" | "explore-area" | "taxi";
+export type AppTab = "map" | "actiontings" | "salt" | "weather" | "ferry" | "holidays" | "explore-area" | "taxi" | "giveback";
 
-const FREE_TABS: AppTab[] = ["map", "salt", "actiontings"];
+const FREE_TABS: AppTab[] = ["map", "salt", "actiontings", "giveback"];
 
 const MAIN_TABS: { id: AppTab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { id: "map",         label: "Explore",      icon: Map },
@@ -28,7 +29,8 @@ interface Props {
 
 export function BottomNav({ active, onChange, unlocked = false, onUpgrade }: Props) {
   const [morOpen, setMoreOpen] = useState(false);
-  const isMoreActive = MORE_TABS.some(t => t.id === active);
+  const w = usePageContent("wording");
+  const isMoreActive = MORE_TABS.some(t => t.id === active) || active === "giveback";
 
   function handleTab(id: AppTab) {
     if (!unlocked && !FREE_TABS.includes(id)) {
@@ -49,7 +51,7 @@ export function BottomNav({ active, onChange, unlocked = false, onUpgrade }: Pro
       {morOpen && (
         <div
           className="fixed bottom-16 right-2 z-50 bg-card border border-border rounded-2xl shadow-xl overflow-hidden"
-          style={{ minWidth: 170 }}
+          style={{ minWidth: 230, maxWidth: 280 }}
         >
           {MORE_TABS.map(tab => {
             const Icon = tab.icon;
@@ -59,7 +61,7 @@ export function BottomNav({ active, onChange, unlocked = false, onUpgrade }: Pro
               <button
                 key={tab.id}
                 onClick={() => handleTab(tab.id)}
-                className="w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold transition-colors hover:bg-muted"
+                className="w-full flex items-center gap-3 px-4 py-3.5 text-base font-semibold transition-colors hover:bg-muted"
                 style={{ color: isActive ? "#1AAFCC" : locked ? "var(--muted-foreground)" : "var(--foreground)" }}
               >
                 <Icon className="w-4 h-4" />
@@ -68,6 +70,23 @@ export function BottomNav({ active, onChange, unlocked = false, onUpgrade }: Pro
               </button>
             );
           })}
+          <div className="border-t border-border" />
+          <a
+            href={`mailto:${w.feedback.email}?subject=${encodeURIComponent(w.feedback.email_subject)}`}
+            onClick={() => setMoreOpen(false)}
+            className="w-full flex items-center gap-3 px-4 py-3.5 text-base font-semibold transition-colors hover:bg-muted text-foreground"
+            data-testid="more-feedback"
+          >
+            <span className="flex-1 text-left leading-snug">{w.feedback.menu_label}</span>
+          </a>
+          <button
+            onClick={() => handleTab("giveback")}
+            className="w-full flex items-center gap-3 px-4 py-3.5 text-base font-semibold transition-colors hover:bg-muted"
+            style={{ color: active === "giveback" ? "#1AAFCC" : "var(--foreground)" }}
+            data-testid="more-giveback"
+          >
+            <span className="flex-1 text-left">{w.give_back.menu_label}</span>
+          </button>
         </div>
       )}
 
@@ -89,7 +108,7 @@ export function BottomNav({ active, onChange, unlocked = false, onUpgrade }: Pro
                   <Lock className="w-2.5 h-2.5 absolute -top-1 -right-1.5" style={{ color: "#E8614A" }} />
                 )}
               </div>
-              <span className="text-[10px] font-semibold">{tab.label}</span>
+              <span className="text-xs font-semibold">{tab.label}</span>
               {isActive && (
                 <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full" style={{ background: "#1AAFCC" }} />
               )}
@@ -108,7 +127,7 @@ export function BottomNav({ active, onChange, unlocked = false, onUpgrade }: Pro
               <Lock className="w-2.5 h-2.5 absolute -top-1 -right-1.5" style={{ color: "#E8614A" }} />
             )}
           </div>
-          <span className="text-[10px] font-semibold">More</span>
+          <span className="text-xs font-semibold">More</span>
           {(isMoreActive || morOpen) && (
             <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full" style={{ background: "#1AAFCC" }} />
           )}

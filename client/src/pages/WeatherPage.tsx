@@ -143,7 +143,7 @@ export default function WeatherPage() {
         )}
 
         {lastUpdated && (
-          <p className="text-[10px] mt-3 opacity-50 text-white">Updated {lastUpdated}</p>
+          <p className="text-[12px] mt-3 opacity-50 text-white">Updated {lastUpdated}</p>
         )}
       </div>
 

@@ -54,7 +54,7 @@ export function StopCard({ stop, isSelected, onClick }: Props) {
 
         <div className="flex items-center gap-1 mt-0.5 mb-1">
           <span
-            className="text-[10px] font-medium px-1.5 py-0.5 rounded-full"
+            className="text-[12px] font-medium px-1.5 py-0.5 rounded-full"
             style={{ background: config.bgColor, color: config.textColor }}
           >
             {config.label}

@@ -7,6 +7,7 @@ function prettyUrl(u: string) {
 
 export default function ActionTingsPage() {
   const c = usePageContent("action_tings");
+  const w = usePageContent("wording");
   return (
     <div className="flex flex-col h-full overflow-hidden bg-background">
       <div className="px-4 py-4 border-b border-border shrink-0" style={{ background: "#1C3B5A" }}>
@@ -15,7 +16,7 @@ export default function ActionTingsPage() {
       </div>
 
       <div className="px-4 py-2 border-b border-border shrink-0" style={{ background: "#E8614A14" }}>
-        <p className="text-xs leading-snug text-foreground/80">Nobody pays to be here. Everything's based on years of experience, preference and subject to change.💚💛❤</p>
+        <p className="text-xs leading-snug text-foreground/80">{w.notes.nobody_pays}</p>
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">

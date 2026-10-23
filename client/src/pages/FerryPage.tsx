@@ -200,7 +200,7 @@ export default function FerryPage() {
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-2">SKN → Nevis</p>
+                      <p className="text-[12px] font-bold uppercase tracking-wider text-muted-foreground mb-2">SKN → Nevis</p>
                       <div className="space-y-1">
                         {parseTimes(ferry.to_nevis).map(t => (
                           <div key={t} className="text-sm font-semibold text-foreground px-2 py-1 rounded-lg bg-muted/40">{t}</div>
@@ -208,7 +208,7 @@ export default function FerryPage() {
                       </div>
                     </div>
                     <div>
-                      <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-2">Nevis → SKN</p>
+                      <p className="text-[12px] font-bold uppercase tracking-wider text-muted-foreground mb-2">Nevis → SKN</p>
                       <div className="space-y-1">
                         {parseTimes(ferry.to_st_kitts).map(t => (
                           <div key={t} className="text-sm font-semibold text-foreground px-2 py-1 rounded-lg bg-muted/40">{t}</div>
