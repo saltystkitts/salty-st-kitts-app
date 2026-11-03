@@ -188,11 +188,13 @@ export default function WeatherPage() {
           ) : null}
 
           {/* Salty weather note */}
-          <div className="mt-4 p-3.5 rounded-xl border border-card-border bg-card">
+          {content.salty_take?.trim() && (
+<div className="mt-4 p-3.5 rounded-xl border border-card-border bg-card">
             <p className="text-xs text-muted-foreground leading-relaxed italic">
               🧂 <strong>The Salty take on St Kitts weather:</strong> <Rich text={content.salty_take} />
             </p>
           </div>
+)}
           <div className="h-4" />
         </div>
       </div>

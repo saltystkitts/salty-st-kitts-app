@@ -163,11 +163,13 @@ export default function FerryPage() {
               </div>
             </div>
 
-            <div className="p-3.5 rounded-xl border border-card-border bg-card">
+            {pf.salty_says?.trim() && (
+<div className="p-3.5 rounded-xl border border-card-border bg-card">
               <p className="text-xs text-muted-foreground leading-relaxed italic">
                 🧂 <strong>Salty says:</strong> <Rich text={pf.salty_says} />
               </p>
             </div>
+)}
             <div className="h-2" />
           </div>
         )}
@@ -222,11 +224,13 @@ export default function FerryPage() {
               </div>
             ))}
 
-            <div className="p-3.5 rounded-xl border border-card-border bg-card">
+            {c.car_ferry.salty_says?.trim() && (
+<div className="p-3.5 rounded-xl border border-card-border bg-card">
               <p className="text-xs text-muted-foreground leading-relaxed italic">
                 🧂 <strong>Salty says:</strong> <Rich text={c.car_ferry.salty_says} />
               </p>
             </div>
+)}
             <div className="h-2" />
           </div>
         )}
@@ -259,11 +263,13 @@ export default function FerryPage() {
               ))}
             </div>
 
-            <div className="p-3.5 rounded-xl border border-card-border bg-card">
+            {c.water_taxi.salty_says?.trim() && (
+<div className="p-3.5 rounded-xl border border-card-border bg-card">
               <p className="text-xs text-muted-foreground leading-relaxed italic">
                 🧂 <strong>Salty says:</strong> <Rich text={c.water_taxi.salty_says} />
               </p>
             </div>
+)}
 
             <div className="px-3 py-2.5 rounded-lg text-xs" style={{ background: "#1AAFCC11", borderLeft: "3px solid #1AAFCC" }}>
               <p className="text-muted-foreground">{c.water_taxi.disclaimer}</p>

@@ -34,12 +34,14 @@ export default function StopDetail() {
         <span className="flex items-center gap-1"><MapPin className="w-4 h-4" />{stop.area}</span>
       </div>
       <p className="text-base leading-relaxed mb-4">{stop.description}</p>
-      <div className="p-4 rounded-xl mb-4" style={{ background: config.bgColor }}>
+      {stop.tip?.trim() && (
+<div className="p-4 rounded-xl mb-4" style={{ background: config.bgColor }}>
         <div className="flex gap-2">
           <Lightbulb className="w-4 h-4 mt-0.5" style={{ color: config.textColor }} />
           <p className="text-sm" style={{ color: config.textColor }}>{stop.tip}</p>
         </div>
       </div>
+)}
       <Button onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lng}`, "_blank")} className="w-full gap-2">
         <Navigation className="w-4 h-4" /> Get Directions
       </Button>

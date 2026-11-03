@@ -159,13 +159,15 @@ export function StopSheet({ stop, onClose, paywalled = false, onUpgrade }: Props
           {/* Attribute badges */}
           <AttributeBadges stop={stop} />
 
-          <div className="flex gap-3 p-3.5 rounded-xl" style={{ background: config.bgColor }}>
+          {stop.tip?.trim() && (
+<div className="flex gap-3 p-3.5 rounded-xl" style={{ background: config.bgColor }}>
             <Lightbulb className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: config.textColor }} />
             <div>
               <div className="text-xs font-semibold mb-0.5" style={{ color: config.textColor }}>Insider Tip</div>
               <p className="text-xs leading-relaxed" style={{ color: config.textColor }}>{stop.tip}</p>
             </div>
           </div>
+)}
 
           <Button onClick={handleDirections} className="w-full gap-2 font-semibold" data-testid="get-directions">
             {paywalled ? <Lock className="w-4 h-4" /> : <Navigation className="w-4 h-4" />}
@@ -212,10 +214,12 @@ export function DesktopStopDetail({ stop, onClose, paywalled = false, onUpgrade 
         </div>
         <p className="text-xs text-foreground leading-relaxed line-clamp-3">{stop.description}</p>
         <AttributeBadges stop={stop} />
-        <div className="flex gap-2 p-2.5 rounded-lg" style={{ background: config.bgColor }}>
+        {stop.tip?.trim() && (
+<div className="flex gap-2 p-2.5 rounded-lg" style={{ background: config.bgColor }}>
           <Lightbulb className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: config.textColor }} />
           <p className="text-[13px] leading-relaxed" style={{ color: config.textColor }}>{stop.tip}</p>
         </div>
+)}
         <Button onClick={handleDirections} size="sm" className="w-full gap-1.5 text-xs font-semibold">
           {paywalled ? <Lock className="w-3.5 h-3.5" /> : <Navigation className="w-3.5 h-3.5" />}
           {paywalled ? "Get Directions · Unlock $8.69" : "Get Directions"}

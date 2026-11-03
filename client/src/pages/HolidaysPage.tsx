@@ -44,10 +44,12 @@ export default function HolidaysPage() {
                   </div>
                 ))}
               </div>
-              <div className="rounded-xl px-3 py-2 text-xs text-foreground leading-relaxed" style={{ background: event.color + "15" }}>
+              {event.the_salt?.trim() && (
+<div className="rounded-xl px-3 py-2 text-xs text-foreground leading-relaxed" style={{ background: event.color + "15" }}>
                 <span className="font-semibold" style={{ color: event.color }}>The Salt: </span>
                 <Rich text={event.the_salt} />
               </div>
+)}
             </div>
           </div>
         ))}
