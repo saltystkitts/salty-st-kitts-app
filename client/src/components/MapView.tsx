@@ -35,6 +35,18 @@ interface Props {
   onPinClick: (stop: Stop) => void;
 }
 
+// iOS Safari leaves hairline gaps between tiles at fractional positions.
+// Draw every tile 1px larger so neighbours overlap and no gap can show.
+const _initTile = (L.GridLayer.prototype as any)._initTile;
+(L.GridLayer as any).include({
+  _initTile(tile: HTMLElement) {
+    _initTile.call(this, tile);
+    const size = (this as any).getTileSize();
+    tile.style.width = size.x + 1 + "px";
+    tile.style.height = size.y + 1 + "px";
+  },
+});
+
 export function MapView({ stops, selectedStop, center, zoom, onPinClick }: Props) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
