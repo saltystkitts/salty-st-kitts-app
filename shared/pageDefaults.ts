@@ -214,9 +214,9 @@ export const PAGE_DEFAULTS = {
       loot: "Grocery", food_nightlife: "Lime & Dine", the_salt: "The Salt",
     },
     taglines: {
-      all: "Every spot worth your time on this rock",
-      beach: "Sand between your toes, Nevis in your face",
-      historical: "Where the bodies are buried (historically speaking)",
+      all: "Hand-picked by Salty. Tried, tested and loved.",
+      beach: "Toes in the sand, drink in hand",
+      historical: "Old stones, big stories, no sugar-coating",
       nature: "Trails, trailheads & jungle stuff",
       loot: "Shop smart, not tourist",
       food_nightlife: "Rum, fish & bad decisions",

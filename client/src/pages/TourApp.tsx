@@ -29,11 +29,11 @@ const EMPTY_MESSAGES: Record<Category, string> = {
 };
 
 const SUBTEXT: Record<Category, string> = {
-  all: "Every spot worth your time on this rock",
-  historical: "Where the bodies are buried (historically speaking)",
+  all: "Hand-picked by Salty. Tried, tested and loved.",
+  historical: "Old stones, big stories, no sugar-coating",
   nature: "Trails, trailheads & jungle stuff",
   food_nightlife: "Rum, fish & bad decisions",
-  beach: "Sand between your toes, Nevis in your face",
+  beach: "Toes in the sand, drink in hand",
   scenic_drive: "Put it in drive and shut up",
   loot: "Shop smart, not tourist",
   the_salt: "Straight from the source",
