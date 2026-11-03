@@ -46,7 +46,7 @@ export default function HolidaysPage() {
               </div>
               {event.the_salt?.trim() && (
 <div className="rounded-xl px-3 py-2 text-xs text-foreground leading-relaxed whitespace-pre-line" style={{ background: event.color + "15" }}>
-                <span className="font-semibold" style={{ color: event.color }}>The Salt: </span>
+                <span className="font-semibold" style={{ color: event.color }}>🧂 Salty says: </span>
                 <Rich text={event.the_salt} />
               </div>
 )}

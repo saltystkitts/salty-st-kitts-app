@@ -163,7 +163,7 @@ export function StopSheet({ stop, onClose, paywalled = false, onUpgrade }: Props
 <div className="flex gap-3 p-3.5 rounded-xl" style={{ background: config.bgColor }}>
             <Lightbulb className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: config.textColor }} />
             <div>
-              <div className="text-xs font-semibold mb-0.5" style={{ color: config.textColor }}>Insider Tip</div>
+              <div className="text-xs font-semibold mb-0.5" style={{ color: config.textColor }}>🧂 Salty says</div>
               <p className="text-xs leading-relaxed" style={{ color: config.textColor }}>{stop.tip}</p>
             </div>
           </div>

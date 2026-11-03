@@ -54,7 +54,7 @@ export default function TaxiPage() {
         {/* Salty tip */}
         {c.the_salt?.trim() && (
 <div className="rounded-2xl p-4 text-sm" style={{ background: "#1AAFCC11", borderLeft: "3px solid #1AAFCC" }}>
-          <p className="font-bold mb-1 text-xs uppercase tracking-wide" style={{ color: "#1AAFCC" }}>🧂 The Salt</p>
+          <p className="font-bold mb-1 text-xs uppercase tracking-wide" style={{ color: "#1AAFCC" }}>🧂 Salty says</p>
           <p className="text-foreground/85 leading-relaxed"><Rich text={c.the_salt} /></p>
         </div>
 )}

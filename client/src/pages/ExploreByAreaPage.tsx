@@ -213,7 +213,7 @@ function StopCard({ stop, onClose }: { stop: Stop; onClose: () => void }) {
           <p className="text-sm leading-relaxed text-foreground/90 mb-4">{stop.description}</p>
           {stop.tip && (
             <div className="p-3 rounded-xl text-sm" style={{ background: "#1AAFCC11", borderLeft: "3px solid #1AAFCC" }}>
-              <span className="font-semibold text-xs uppercase tracking-wide" style={{ color: "#1AAFCC" }}>The Salt</span>
+              <span className="font-semibold text-xs uppercase tracking-wide" style={{ color: "#1AAFCC" }}>🧂 Salty says</span>
               <p className="mt-1 text-foreground/80">{stop.tip}</p>
             </div>
           )}
