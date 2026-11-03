@@ -8,7 +8,6 @@ const CATEGORIES: { value: Category; emoji: string }[] = [
   { value: "nature",         emoji: "🌿" },
   { value: "loot",           emoji: "🥑" },
   { value: "food_nightlife", emoji: "🍹" },
-  { value: "the_salt",       emoji: "🧂" },
 ];
 
 interface Props {
