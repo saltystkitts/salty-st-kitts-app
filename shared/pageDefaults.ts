@@ -206,7 +206,8 @@ export const PAGE_DEFAULTS = {
     },
     notes: {
       nobody_pays: "Nobody pays to be here. Everything's based on years of experience, preference and subject to change.💚💛❤️",
-      beaches: "🏖️ All beaches in St Kitts are free and open to the public. You may be charged for amenities, but you can always access the beach. Swim at your own risk and to your ability. Leave only footprints.",
+      beaches: "🏖️ All beaches in St Kitts are free and open to the public. You may be charged for amenities, but you can always access the beach. Swim at your own risk and to your own ability. There are no lifeguards in St Kitts. Please leave only footprints behind.",
+      nature: "🥾 Hike at your own risk and to your own ability. Wear proper shoes and always bring water. We always recommend hiring a local guide for hikes in St Kitts.",
     },
     category_bar: {
       all: "All", beach: "Beaches", historical: "History", nature: "The Bush",

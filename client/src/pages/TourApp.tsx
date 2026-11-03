@@ -106,6 +106,12 @@ export default function TourApp({ paywalled = false, onUpgrade }: TourAppProps) 
         </div>
       )}
 
+      {category === "nature" && (w.notes as any).nature?.trim() && (
+        <div className="px-4 py-2 border-b border-border shrink-0" style={{ background: "#2E8B5714" }}>
+          <p className="text-xs leading-snug text-foreground/80">{(w.notes as any).nature}</p>
+        </div>
+      )}
+
       {/* Special full-page tabs — no map */}
       {category === "the_salt" && (
         <div className="flex-1 min-h-0 overflow-hidden flex flex-col"><TheSaltPage /></div>
