@@ -30,7 +30,7 @@ export const PAGE_DEFAULTS = {
         },
       },
       fares_and_tips: [
-        "🎟 **EC$25–30** per person (~US$9–11)",
+        "🎟 **$25–30 XCD** per person (~$9–11 USD)",
         "📍 Departs from **Port Zante**, Basseterre",
         "⏰ Arrive **15–20 min early** — ferries fill up",
         "💵 **Cash only** at the dock",
@@ -46,7 +46,7 @@ export const PAGE_DEFAULTS = {
           route: "Majors Bay → Cades Bay, Nevis",
           crossing_time: "~15–25 min",
           phone: "869-662-7002",
-          price: "EC$25 per person · vehicles extra",
+          price: "$25 XCD per person · vehicles extra",
           note: "Drive-on, drive-off. Arrive 30 min early. Runs every 2 hrs daily.",
           to_nevis: "8:00 AM, 10:00 AM, 12:00 PM, 2:00 PM, 4:00 PM, 7:00 PM",
           to_st_kitts: "7:00 AM, 9:00 AM, 11:00 AM, 1:00 PM, 3:00 PM, 6:00 PM",
