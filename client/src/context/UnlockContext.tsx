@@ -1,6 +1,5 @@
-import { Capacitor } from "@capacitor/core";
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { isIOSApp, ownsUnlock, onUnlockTransaction, UNLOCK_ID, buy, restore as iapRestore, getPrice } from "@/lib/iap";
+import { isStoreApp, ownsUnlock, onUnlockTransaction, UNLOCK_ID, buy, restore as iapRestore, getPrice } from "@/lib/iap";
 
 interface UnlockContextType {
   unlocked: boolean;
@@ -24,13 +23,11 @@ const UnlockContext = createContext<UnlockContextType>({
 });
 
 export function UnlockProvider({ children }: { children: ReactNode }) {
-  // iPhone app: Apple in-app purchase. Android app: everything unlocked for now
-  // (testing) until Google Play billing is set up. Website: Stripe + codes.
-  const ios = isIOSApp();
-  const android = Capacitor.isNativePlatform() && !ios;
+  // Store apps: Apple in-app purchase (iPhone) or Google Play Billing (Android).
+  // Website: Stripe + codes. `ios` here means "store app" (either store).
+  const ios = isStoreApp();
   const IOS_KEY = "salty_unlocked_ios";
   const [unlocked, setUnlocked] = useState(() => {
-    if (android) return true;
     if (ios) return localStorage.getItem(IOS_KEY) === "true";
     return localStorage.getItem("salty_unlocked") === "true";
   });
@@ -43,7 +40,7 @@ export function UnlockProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!ios) return;
-    // Check what Apple says this Apple ID owns (works offline from Apple's cache)
+    // Check what the store says this account owns (works offline from the store's cache)
     ownsUnlock().then(owned => { if (owned) markIOSUnlocked(true); });
     onUnlockTransaction(() => markIOSUnlocked(true));
     getPrice(UNLOCK_ID).then(setUnlockPrice);

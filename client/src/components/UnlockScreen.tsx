@@ -3,7 +3,7 @@ import { useUnlock } from "../context/UnlockContext";
 import { X } from "lucide-react";
 import saltyLogo from "@assets/salty-icon-new.png";
 import { usePageContent } from "@/lib/pageContent";
-import { openRedeemCode } from "@/lib/iap";
+import { openRedeemCode, isIOSApp } from "@/lib/iap";
 
 export default function UnlockScreen({ onDismiss }: { onDismiss?: () => void }) {
   const { unlock, stripeLink, ios, unlockPrice, buyUnlock, restore } = useUnlock();
@@ -98,9 +98,11 @@ export default function UnlockScreen({ onDismiss }: { onDismiss?: () => void }) 
               </button>
               {note && <p className="text-xs text-center mb-2" style={{ color: "#E8614A" }}>{note}</p>}
               <div className="flex items-center justify-center gap-4">
-                <button onClick={openRedeemCode} className="text-xs underline" style={{ color: "#1AAFCC" }}>
-                  {u.redeem_link}
-                </button>
+                {isIOSApp() && (
+                  <button onClick={openRedeemCode} className="text-xs underline" style={{ color: "#1AAFCC" }}>
+                    {u.redeem_link}
+                  </button>
+                )}
                 <button onClick={handleRestore} disabled={!!busy} className="text-xs underline" style={{ color: "#1AAFCC" }}>
                   {busy === "restore" ? "Checking..." : u.restore_link}
                 </button>

@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Capacitor } from "@capacitor/core";
 import { usePageContent } from "@/lib/pageContent";
-import { isIOSApp, buy, BEER_ID } from "@/lib/iap";
+import { isStoreApp, buy, BEER_ID } from "@/lib/iap";
 
 export default function GiveBackPage() {
   const g = usePageContent("wording").give_back;
-  // iPhone: Apple in-app purchase. Website: Stripe link (once set). Android: hidden
-  // until Google Play billing is set up. The beer never unlocks anything.
-  const ios = isIOSApp();
+  // Store apps: Apple / Google Play in-app purchase. Website: Stripe link (once set).
+  // The beer never unlocks anything.
+  const ios = isStoreApp();
   const showBeer = ios || (!Capacitor.isNativePlatform() && !!g.beer_link);
   const [beerState, setBeerState] = useState<"" | "busy" | "thanks" | "error">("");
   async function buyBeer() {
