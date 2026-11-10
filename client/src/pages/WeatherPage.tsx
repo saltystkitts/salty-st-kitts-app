@@ -1,7 +1,7 @@
 import { usePageContent, Rich } from "@/lib/pageContent";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Wind, Droplets, Eye, Thermometer, RefreshCw } from "lucide-react";
+import { Wind, Droplets, Eye, Thermometer, RefreshCw, Sunrise, Sunset, Radar } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 // Open-Meteo free API — no key needed, returns current + 7-day forecast
@@ -24,6 +24,8 @@ interface WeatherData {
     temperature_2m_min: number[];
     weather_code: number[];
     precipitation_probability_max: number[];
+    sunrise: string[];
+    sunset: string[];
   };
 }
 
@@ -51,6 +53,17 @@ function dayLabel(dateStr: string, index: number): string {
   return new Date(dateStr).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
 }
 
+// Open-Meteo returns local time like "2026-11-10T06:12" — format without timezone conversion
+function clock12(iso?: string): string {
+  if (!iso || iso.length < 16) return "";
+  const h = parseInt(iso.slice(11, 13), 10);
+  const m = iso.slice(14, 16);
+  const ampm = h >= 12 ? "PM" : "AM";
+  return `${h % 12 === 0 ? 12 : h % 12}:${m} ${ampm}`;
+}
+
+const RADAR_URL = "https://www.windy.com/-Weather-radar-radar?radar,17.30,-62.72,9";
+
 function toF(c: number): number { return Math.round(c * 9 / 5 + 32); }
 
 export default function WeatherPage() {
@@ -61,7 +74,7 @@ export default function WeatherPage() {
     queryKey: ["weather-stkitts"],
     queryFn: () =>
       fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LNG}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,wind_direction_10m,weather_code,visibility&daily=temperature_2m_max,temperature_2m_min,weather_code,precipitation_probability_max&wind_speed_unit=mph&temperature_unit=celsius&forecast_days=7&timezone=America%2FSt_Kitts`
+        `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LNG}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,wind_direction_10m,weather_code,visibility&daily=temperature_2m_max,temperature_2m_min,weather_code,precipitation_probability_max,sunrise,sunset&wind_speed_unit=mph&temperature_unit=celsius&forecast_days=7&timezone=America%2FSt_Kitts`
       ).then(r => r.json()),
     staleTime: 1000 * 60 * 30, // 30 min
   });
@@ -142,6 +155,19 @@ export default function WeatherPage() {
           </div>
         )}
 
+        {daily?.sunrise?.[0] && !isLoading && (
+          <div className="flex gap-4 mt-3 text-white/80 text-xs" data-testid="weather-sun">
+            <div className="flex items-center gap-1.5">
+              <Sunrise className="w-3.5 h-3.5" style={{ color: "#1AAFCC" }} />
+              Sunrise {clock12(daily.sunrise[0])}
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Sunset className="w-3.5 h-3.5" style={{ color: "#1AAFCC" }} />
+              Sunset {clock12(daily.sunset[0])}
+            </div>
+          </div>
+        )}
+
         {lastUpdated && (
           <p className="text-[12px] mt-3 opacity-50 text-white">Updated {lastUpdated}</p>
         )}
@@ -186,6 +212,17 @@ export default function WeatherPage() {
               })}
             </div>
           ) : null}
+
+          {/* Live radar */}
+          <button
+            onClick={() => window.open(RADAR_URL, "_blank", "noopener noreferrer")}
+            className="mt-4 w-full flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-white"
+            style={{ background: "#1C3B5A" }}
+            data-testid="weather-radar"
+          >
+            <Radar className="w-4 h-4" style={{ color: "#1AAFCC" }} />
+            Live radar &amp; hourly forecast
+          </button>
 
           {/* Salty weather note */}
           {content.salty_take?.trim() && (

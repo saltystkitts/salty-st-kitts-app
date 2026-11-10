@@ -1,3 +1,4 @@
+import { showDuration } from "@/lib/duration";
 import { useRoute, Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -30,7 +31,7 @@ export default function StopDetail() {
       </Link>
       <h1 className="text-2xl font-bold mb-2">{stop.name}</h1>
       <div className="flex items-center gap-3 mb-4 text-sm text-muted-foreground">
-        <span className="flex items-center gap-1"><Clock className="w-4 h-4" />{stop.duration}</span>
+        {showDuration(stop) && <span className="flex items-center gap-1"><Clock className="w-4 h-4" />{stop.duration}</span>}
         <span className="flex items-center gap-1"><MapPin className="w-4 h-4" />{stop.area}</span>
       </div>
       <p className="text-base leading-relaxed mb-4">{stop.description}</p>

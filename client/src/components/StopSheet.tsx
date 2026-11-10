@@ -1,3 +1,4 @@
+import { showDuration } from "@/lib/duration";
 import { imgSrc } from "../lib/nativeApi";
 import type { Stop } from "@shared/schema";
 import { X, Clock, MapPin, Lightbulb, Navigation, ParkingCircle, Cigarette, Baby, Wifi, CreditCard, Shirt, Sun, Music, Lock } from "lucide-react";
@@ -139,7 +140,7 @@ export function StopSheet({ stop, onClose, paywalled = false, onUpgrade }: Props
         )}
         <div className="px-5 py-4 space-y-4">
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" />{stop.duration}</span>
+            {showDuration(stop) && <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" />{stop.duration}</span>}
             <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5" />{stop.area}</span>
           </div>
 
@@ -209,7 +210,7 @@ export function DesktopStopDetail({ stop, onClose, paywalled = false, onUpgrade 
 
       <div className="px-4 py-3 space-y-3">
         <div className="flex items-center gap-3 text-xs text-muted-foreground">
-          <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{stop.duration}</span>
+          {showDuration(stop) && <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{stop.duration}</span>}
           <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{stop.area}</span>
         </div>
         <p className="text-xs text-foreground leading-relaxed line-clamp-3">{stop.description}</p>

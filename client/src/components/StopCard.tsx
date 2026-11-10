@@ -1,3 +1,4 @@
+import { showDuration } from "@/lib/duration";
 import { imgSrc } from "../lib/nativeApi";
 import type { Stop } from "@shared/schema";
 import { Clock, MapPin, Star } from "lucide-react";
@@ -66,10 +67,12 @@ export function StopCard({ stop, isSelected, onClick }: Props) {
         </p>
 
         <div className="flex items-center gap-3 mt-1.5">
+          {showDuration(stop) && (
           <span className="flex items-center gap-1 text-xs text-muted-foreground">
             <Clock className="w-3 h-3" />
             {stop.duration}
           </span>
+          )}
           <span className="flex items-center gap-1 text-xs text-muted-foreground">
             <MapPin className="w-3 h-3" />
             {stop.area}
