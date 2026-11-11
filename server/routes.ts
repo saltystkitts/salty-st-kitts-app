@@ -291,6 +291,39 @@ export async function registerRoutes(httpServer: Server, app: Express): Promise<
     return res.json({ valid, stripeLink: settings["stripe_link"] ?? "" });
   });
 
+  // ── Smart download link for QR codes: /get ─────────────
+  // iPhone → App Store. Android → Google Play once setting play_live = "yes", otherwise a "coming soon" page.
+  // Scans are counted per device type in app_settings (get_scans_ios / _android / _other).
+  const APP_STORE_URL = "https://apps.apple.com/us/app/salty-st-kitts-the-guide/id6815387176";
+  const PLAY_URL = "https://play.google.com/store/apps/details?id=com.saltystkitts.guide";
+  app.get(["/get", "/get/"], async (req, res) => {
+    const ua = String(req.headers["user-agent"] || "");
+    const isIOS = /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/i.test(ua) && /Mobile/i.test(ua));
+    const isAndroid = /Android/i.test(ua);
+    const kind = isIOS ? "ios" : isAndroid ? "android" : "other";
+    try {
+      await pool.query(
+        "INSERT INTO app_settings (key, value) VALUES ($1, '1') ON CONFLICT (key) DO UPDATE SET value = (COALESCE(NULLIF(app_settings.value, ''), '0')::int + 1)::text",
+        ["get_scans_" + kind],
+      );
+    } catch {}
+    res.set("Cache-Control", "no-store");
+    if (isIOS) return res.redirect(302, APP_STORE_URL);
+    let playLive = false;
+    try {
+      const r = await pool.query("SELECT value FROM app_settings WHERE key = 'play_live'");
+      playLive = r.rows[0]?.value === "yes";
+    } catch {}
+    if (isAndroid && playLive) return res.redirect(302, PLAY_URL);
+    const androidLine = playLive
+      ? `<a class="btn" href="${PLAY_URL}">Get it on Google Play</a>`
+      : `<p class="soon">Google Play is coming soon.</p><p>On Android? Use it in your browser for now. Same map, same tips.</p><a class="btn" href="/">Open the app →</a>`;
+    const body = isAndroid
+      ? `${androidLine}<p class="small">On an iPhone? <a href="${APP_STORE_URL}">Get it on the App Store</a></p>`
+      : `<a class="btn" href="${APP_STORE_URL}">Get it on the App Store</a>${playLive ? `<a class="btn alt" href="${PLAY_URL}">Get it on Google Play</a>` : `<p class="soon">Google Play coming soon.</p>`}<p class="small"><a href="/">Or open it in your browser</a></p>`;
+    res.type("html").send(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Salty St Kitts: The Guide</title><link rel="icon" href="/icon-192.png"><style>body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#1b3a5c;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;text-align:center}main{max-width:360px;padding:32px 24px}img{width:96px;height:96px;border-radius:22px}h1{font-size:26px;margin:18px 0 6px}p{font-size:17px;line-height:1.45;color:rgba(255,255,255,.85);margin:10px 0}.soon{font-weight:700;color:#5fd0e0;font-size:19px;margin-top:22px}.btn{display:block;margin:18px 0 0;padding:16px;border-radius:16px;background:#e0614a;color:#fff;font-weight:700;font-size:18px;text-decoration:none}.btn.alt{background:#fff;color:#1b3a5c}.small{font-size:15px;margin-top:22px}.small a{color:#5fd0e0}</style></head><body><main><img src="/icon-512.png" alt="Salty St Kitts"><h1>Salty St Kitts: The Guide</h1><p>Salty's favorite spots and local tips for St Kitts.</p>${body}</main></body></html>`);
+  });
+
   // ── Public: get Stripe link ────────────────────────────
   app.get("/api/stripe-link", async (_req, res) => {
     const rows = await db.select().from(appSettings).where(eq(appSettings.key, "stripe_link"));
